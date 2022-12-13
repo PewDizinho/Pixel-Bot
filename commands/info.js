@@ -17,9 +17,9 @@ module.exports = {
 					.setMaxValues(1)
 					.addOptions([
 						{
-							label: 'Pixel Shop',
+							label: 'Pixel Store',
 							description: 'Mais informações sobre nossa loja virtual!',
-							value: 'pixel_shop',
+							value: 'pixel_store',
 						},
 						{
 							label: 'Pixel Community',
@@ -32,7 +32,7 @@ module.exports = {
 		.setColor(0x0099FF)
 		.setTitle('Pixel')
 		.setThumbnail('https://media.discordapp.net/attachments/1052329282069872650/1052329371165274132/Pixel_Coin_Blue.png?width=675&height=675')
-		.setDescription('Escolha as opções abaixo! \n\n<:Pixel_TC:892224665030901800> Pixel Shop\n\n<:Pixel_Coin_Green:1052329968090218617> Pixel Community');
+		.setDescription('Escolha as opções abaixo! \n\n<:Pixel_TC:892224665030901800> Pixel Store\n\n<:Pixel_Coin_Green:1052329968090218617> Pixel Community');
 
 	await interaction.reply({ content: '', ephemeral: true, embeds: [embed], components: [row] });
 

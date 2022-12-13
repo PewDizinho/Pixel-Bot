@@ -8,12 +8,12 @@ module.exports = {
         const selected = interaction.values.join(', ');
         var embed, row;
         switch (selected) {
-            case "pixel_shop":
+            case "pixel_store":
                 embed = new EmbedBuilder()
                     .setColor(0x0099FF)
-                    .setTitle('Pixel Shop')
+                    .setTitle('Pixel Store')
                     .setImage('https://media.discordapp.net/attachments/1052329282069872650/1052329370305450115/Pixel_Store.png?width=473&height=473')
-                    .setDescription('A Pixel Shop é o nosso site onde você pode vender seu trabalho no minecraft (como construções, mods, plugins, scripts, skripts, texturas ou outros itens de design) para que donos de servidores comprem! Infelizmente, ainda estamos desenvolvendo o site, mas fique esperto! Iremos anunciar qualquer adição no canal <#891465741851848725>!');
+                    .setDescription('A Pixel Store é o nosso site onde você pode vender seu trabalho no minecraft (como construções, mods, plugins, scripts, skripts, texturas ou outros itens de design) para que donos de servidores comprem! Infelizmente, ainda estamos desenvolvendo o site, mas fique esperto! Iremos anunciar qualquer adição no canal <#891465741851848725>!');
                 row = new ActionRowBuilder()
                     .addComponents(
                         new StringSelectMenuBuilder()
@@ -46,9 +46,9 @@ module.exports = {
                             .setMaxValues(1)
                             .addOptions([
                                 {
-                                    label: 'Pixel Shop',
+                                    label: 'Pixel Store',
                                     description: 'Mais informações sobre nossa loja virtual!',
-                                    value: 'pixel_shop',
+                                    value: 'pixel_store',
                                 }
                             ]),
                     );
