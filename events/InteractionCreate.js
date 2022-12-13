@@ -35,7 +35,7 @@ module.exports = {
                 embed = new EmbedBuilder()
                     .setColor(0x0099FF)
                     .setTitle('Pixel Community')
-                    .setImage('https://media.discordapp.net/attachments/1052329282069872650/1052329370305450115/Pixel_Store.png?width=473&height=473')
+                    .setImage('https://media.discordapp.net/attachments/1052329282069872650/1052329369890205787/Pixel_Community.png?width=473&height=473')
                     .setDescription('A Pixel Community é, como nosso nome já diz, a nossa comunidade! Onde donos de outros servidores podem se ajudar na criação e desenvolvimento de projetos envolvendo minecraft! Tem alguma dúvida? Acha que consegue ajudar alguém? Nossa comunidade é formada por vocês, então contamos com vocês para fazer dela um lugar incrível para todos!');
                 row = new ActionRowBuilder()
                     .addComponents(
