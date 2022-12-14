@@ -5,7 +5,6 @@ module.exports = {
     once: true,
     execute(client) {
         console.clear();
-
-        console.log(`Ready! Logged in as ${client.user.tag}`);
+        console.log(`Estou online como *${client.user.tag}*! Tenha um dia PixelizaLindo!`);
     },
 };
