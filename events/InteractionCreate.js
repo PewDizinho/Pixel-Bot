@@ -22,7 +22,6 @@ module.exports = {
                             .setMinValues(1)
                             .setMaxValues(1)
                             .addOptions([
-
                                 {
                                     label: 'Pixel Community',
                                     description: 'Mais informações sobre nossa comunidade!',
