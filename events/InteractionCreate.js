@@ -132,6 +132,7 @@ module.exports = {
                         .setFooter(defaultFooter);
                     interaction.reply({ content: "Sua solicitação foi enviada para nossa equipe da staff! Irei te avisar na DM quando ela for aceita.", ephemeral: true });
                     interaction.client.channels.cache.find(channel => channel.id == channelsId.verification.items).send({ embeds: [embed], components: [row] });
+
                     break;
             }
 
