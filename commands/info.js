@@ -1,4 +1,4 @@
-const {Message, ComponentType, SlashCommandBuilder, ActionRowBuilder,EmbedBuilder,StringSelectMenuBuilder, Discord } = require('discord.js');
+const { SlashCommandBuilder, ActionRowBuilder,EmbedBuilder,StringSelectMenuBuilder } = require('discord.js');
 
 module.exports = {
 	data: 
