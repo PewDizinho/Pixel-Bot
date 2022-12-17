@@ -1,10 +1,11 @@
 const { Client, Events, GatewayIntentBits, Collection } = require('discord.js');
-const { token } = require('./config.json');
+const { token, ownerId } = require('./config.json');
 const fs = require('node:fs');
 const path = require('node:path');
 const client = new Client({ intents: [GatewayIntentBits.Guilds], presence: "dnd" });
 
-
+client.cooldowns = new Collection();
+client.COOLDOWN_SECONDS = 10;
 //COMMANDS 
 client.commands = new Collection();
 const commandsPath = path.join(__dirname, 'commands');
@@ -35,14 +36,20 @@ for (const file of eventFiles) {
 
 client.on(Events.InteractionCreate, async interaction => {
 	if (!interaction.isChatInputCommand()) return;
+	if (client.cooldowns.has(interaction.user.id) && interaction.user.id != ownerId) {
+		interaction.reply({ content: "Espere um pouco para executar outro comando!", ephemeral: true });
+		return;
+	}
+	client.cooldowns.set(interaction.user.id, true);
+	setTimeout(() => {
+		client.cooldowns.delete(interaction.user.id);
+	}, client.COOLDOWN_SECONDS * 1000);
 
 	const command = interaction.client.commands.get(interaction.commandName);
-
 	if (!command) {
 		console.error(`No command matching ${interaction.commandName} was found.`);
 		return;
 	}
-
 	try {
 		await command.execute(interaction);
 	} catch (error) {

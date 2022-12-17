@@ -3,8 +3,8 @@ const { SlashCommandBuilder, ActionRowBuilder, Events, ModalBuilder, TextInputBu
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('cadastrar')
-        .setDescription('Se cadastre!')
-        .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
+        .setDescription('Se cadastre!'),
+       // .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
     async execute(interaction) {
 
         const modal = new ModalBuilder()
