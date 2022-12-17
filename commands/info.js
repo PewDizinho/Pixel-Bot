@@ -11,7 +11,7 @@ module.exports = {
 		const row = new ActionRowBuilder()
 		.addComponents(
 			new StringSelectMenuBuilder()
-					.setCustomId('select')
+					.setCustomId('info')
 					.setPlaceholder('Selecione algo!')
 					.setMinValues(1)
 					.setMaxValues(1)
