@@ -64,7 +64,6 @@ module.exports = {
                     break;
                 case 'createItem_category':
                     //Verificação pra se já foi cadastrado ou não, se não for, manda pra tela de cadastro
-
                     const modal = new ModalBuilder()
                         .setCustomId('item_submit')
                         .setTitle(`Nova postagem ${selected.charAt(0).toUpperCase() + selected.slice(1)}`);
@@ -73,6 +72,7 @@ module.exports = {
                         .setLabel('Qual o nome do seu item?')
                         .setPlaceholder('Ex: "Plugin de Teste')
                         .setStyle(TextInputStyle.Short);
+
                     const version = new TextInputBuilder()
                         .setCustomId('version')
                         .setLabel('Qual a versão do seu item?')
@@ -88,16 +88,20 @@ module.exports = {
                         .setLabel('Uma breve descrição do item')
                         .setPlaceholder('Ex: "Esse plugin é perfeito para aqueles que precisam de um plugin de teste!"')
                         .setStyle(TextInputStyle.Paragraph);
-                    modal.addComponents(new ActionRowBuilder().addComponents(itemname), new ActionRowBuilder().addComponents(version), new ActionRowBuilder().addComponents(file), new ActionRowBuilder().addComponents(description));
+                    const itemtype = new TextInputBuilder()
+                        .setCustomId('itemType')
+                        .setLabel('Tipo de item (NÃO MEXER)')
+                        .setPlaceholder('Ex: "Plugin')
+                        .setValue(selected.charAt(0).toUpperCase() + selected.slice(1))
+                        .setStyle(TextInputStyle.Short);
+                    modal.addComponents(new ActionRowBuilder().addComponents(itemname), new ActionRowBuilder().addComponents(version), new ActionRowBuilder().addComponents(file), new ActionRowBuilder().addComponents(description), new ActionRowBuilder().addComponents(itemtype));
                     interaction.showModal(modal);
                     break;
             }
-
-
         } else if (interaction.isModalSubmit()) {
             switch (interaction.customId) {
                 case 'cadastro_vendedor':
-                    let embed = new EmbedBuilder()
+                    var embed = new EmbedBuilder()
                         .setColor(0x0099FF)
                         .setTitle('Cadastro Vendedor')
                         .setDescription('Username \`\`\` ' + interaction.member.user.tag + '\`\`\`\n\nNick \`\`\`' + interaction.fields.getTextInputValue("nick") + '\`\`\`\n\nDescrição\`\`\`' + interaction.fields.getTextInputValue("description") + '\`\`\`\n ')
@@ -106,6 +110,13 @@ module.exports = {
                     interaction.client.channels.cache.find(channel => channel.id == channelsId.verification.vendedores).send({ embeds: [embed] }).then(msg => { msg.react("✅"); msg.react("❎"); msg.react("🔰"); });
                     break;
                 case 'item_submit':
+                    var embed = new EmbedBuilder()
+                        .setColor(0x0099FF)
+                        .setTitle('Solicitação de item')
+                        .setDescription('Username \`\`\`' + interaction.member.user.tag + '\`\`\`\n\nNome do Item \`\`\`' + interaction.fields.getTextInputValue("nome") + '\`\`\`\n\nVersão\`\`\`' + interaction.fields.getTextInputValue("version") + '\`\`\`\n ' + '\nDescrição\`\`\`' + interaction.fields.getTextInputValue("description") + '\`\`\`\n' + `\n[Link](${interaction.fields.getTextInputValue("file_URL")})\`\`\`` + interaction.fields.getTextInputValue("file_URL") + '\`\`\`\n ' + '\nTipo de item\`\`\`' + interaction.fields.getTextInputValue("itemType") + '\`\`\`\n ')
+                        .setFooter({ text: `| ❎ Negar | ✅ Aceitar | 🔰 Editar |`, iconURL: 'https://media.discordapp.net/attachments/1052329282069872650/1052329371165274132/Pixel_Coin_Blue.png?width=675&height=675' });
+                    interaction.reply({ content: "Sua solicitação foi enviada para nossa equipe da staff! Irei te avisar na DM quando ela for aceita.", ephemeral: true });
+                    interaction.client.channels.cache.find(channel => channel.id == channelsId.verification.items).send({ embeds: [embed] }).then(msg => { msg.react("✅"); msg.react("❎"); msg.react("🔰"); });
 
                     break;
             }
