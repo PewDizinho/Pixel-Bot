@@ -4,7 +4,8 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('cadastrar')
         .setDescription('Se cadastre!')
-        .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
+      //  .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
+        ,
     async execute(interaction) {
 
         const modal = new ModalBuilder()
@@ -15,7 +16,7 @@ module.exports = {
             .setLabel("Defina um NickName para você usar!")
             .setPlaceholder('Nicks não devem fazem referência ao seu nick verdadeiro, nicks estão sujeitos a verificação.')
             .setStyle(TextInputStyle.Short);
-        
+
         const description = new TextInputBuilder()
             .setCustomId('description')
             .setLabel('Uma breve descrição do seu trabalho')

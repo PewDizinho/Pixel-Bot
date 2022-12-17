@@ -4,7 +4,8 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('createitem')
         .setDescription('Crie um item!')
-        .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
+       // .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
+        ,
     async execute(interaction) {
 
         const embed = new EmbedBuilder()

@@ -1,5 +1,5 @@
-const { Events, EmbedBuilder, ActionRowBuilder, StringSelectMenuBuilder, ModalBuilder, TextInputBuilder, TextInputStyle } = require('discord.js');
-const { channelsId } = require('../config.json');
+const { Events, EmbedBuilder, ActionRowBuilder, StringSelectMenuBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, ButtonBuilder, ButtonStyle } = require('discord.js');
+const { channelsId, defaultFooter } = require('../config.json');
 module.exports = {
     name: Events.InteractionCreate,
     once: false,
@@ -110,14 +110,28 @@ module.exports = {
                     interaction.client.channels.cache.find(channel => channel.id == channelsId.verification.vendedores).send({ embeds: [embed] }).then(msg => { msg.react("✅"); msg.react("❎"); msg.react("🔰"); });
                     break;
                 case 'item_submit':
+                    const row = new ActionRowBuilder()
+                        .addComponents(
+                            new ButtonBuilder()
+                                .setCustomId('aceitar')
+                                .setLabel('Aceitar')
+                                .setStyle(ButtonStyle.Success),
+                            new ButtonBuilder()
+                                .setCustomId('negar')
+                                .setLabel('Negar')
+                                .setStyle(ButtonStyle.Danger),
+                            new ButtonBuilder()
+                                .setCustomId('editar')
+                                .setLabel('Editar')
+                                .setStyle(ButtonStyle.Primary),
+                        );
                     var embed = new EmbedBuilder()
                         .setColor(0x0099FF)
                         .setTitle('Solicitação de item')
                         .setDescription('Username \`\`\`' + interaction.member.user.tag + '\`\`\`\n\nNome do Item \`\`\`' + interaction.fields.getTextInputValue("nome") + '\`\`\`\n\nVersão\`\`\`' + interaction.fields.getTextInputValue("version") + '\`\`\`\n ' + '\nDescrição\`\`\`' + interaction.fields.getTextInputValue("description") + '\`\`\`\n' + `\n[Link](${interaction.fields.getTextInputValue("file_URL")})\`\`\`` + interaction.fields.getTextInputValue("file_URL") + '\`\`\`\n ' + '\nTipo de item\`\`\`' + interaction.fields.getTextInputValue("itemType") + '\`\`\`\n ')
-                        .setFooter({ text: `| ❎ Negar | ✅ Aceitar | 🔰 Editar |`, iconURL: 'https://media.discordapp.net/attachments/1052329282069872650/1052329371165274132/Pixel_Coin_Blue.png?width=675&height=675' });
+                        .setFooter(defaultFooter);
                     interaction.reply({ content: "Sua solicitação foi enviada para nossa equipe da staff! Irei te avisar na DM quando ela for aceita.", ephemeral: true });
-                    interaction.client.channels.cache.find(channel => channel.id == channelsId.verification.items).send({ embeds: [embed] }).then(msg => { msg.react("✅"); msg.react("❎"); msg.react("🔰"); });
-
+                    interaction.client.channels.cache.find(channel => channel.id == channelsId.verification.items).send({ embeds: [embed], components: [row] });
                     break;
             }
 
