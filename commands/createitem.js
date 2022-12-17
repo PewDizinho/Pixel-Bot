@@ -35,11 +35,11 @@ module.exports = {
                 .setLabel('Qual a versão do seu item?')
                 .setPlaceholder('Ex: "1.12.2" ou "1.8 - 1.12.2"')
                 .setStyle(TextInputStyle.Short);
-            // const file = new TextInputBuilder()
-            //     .setCustomId('file_URL')
-            //     .setLabel('URL para download do seu item')
-            //     .setPlaceholder("Use MEDIAFIRE, DRIVE ou DROPBOX de preferência")
-            //     .setStyle(TextInputStyle.Short);
+            const file = new TextInputBuilder()
+                .setCustomId('file_URL')
+                .setLabel('URL para download do seu item')
+                .setPlaceholder("Use MEDIAFIRE, DRIVE ou DROPBOX de preferência")
+                .setStyle(TextInputStyle.Short);
             const description = new TextInputBuilder()
                 .setCustomId('description')
                 .setLabel('Uma breve descrição do item')
