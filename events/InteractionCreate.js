@@ -1,5 +1,5 @@
 const { Events, EmbedBuilder, ActionRowBuilder, StringSelectMenuBuilder } = require('discord.js');
-
+const { channelsId } = require('../config.json');
 module.exports = {
     name: Events.InteractionCreate,
     once: false,
@@ -55,18 +55,16 @@ module.exports = {
             }
 
             interaction.update({ content: '', ephemeral: false, embeds: [embed], components: [row] });
-        } else {
-            console.log(interaction.values)
-            if (interaction.name == 'Cadastrar Vendedor') {//<- como eu verifico isso aqui, se é essa tela aqui  https://prnt.sc/eyMvyH7PHYj9
+        } else if (interaction.isModalSubmit()) {
+            if (interaction.customId == 'cadastro_vendedor') {//<- como eu verifico isso aqui, se é essa tela aqui  https://prnt.sc/eyMvyH7PHYj9
                 let embed = new EmbedBuilder()
                     .setColor(0x0099FF)
                     .setTitle('Cadastro Vendedor')
-                    .setDescription('Seu nick \`\`\`' + interaction.fields.getTextInputValue("nick") + '\`\`\`\n\nSua descrição\`\`\`' + interaction.fields.getTextInputValue("description") + '\`\`\`')
-
-                interaction.channel.send({ embeds: [embed] })
+                    .setDescription('Username \`\`\` ' + interaction.member.user.tag + '\`\`\`\n\nNick \`\`\`' + interaction.fields.getTextInputValue("nick") + '\`\`\`\n\nDescrição\`\`\`' + interaction.fields.getTextInputValue("description") + '\`\`\`\n ')
+                    .setFooter({ text: `| ❎ Negar | ✅ Aceitar | 🔰 Editar |`, iconURL: 'https://media.discordapp.net/attachments/1052329282069872650/1052329371165274132/Pixel_Coin_Blue.png?width=675&height=675' });
+                interaction.reply({ content: "Sua solicitação foi enviada para nossa equipe da staff! Irei te avisar na DM quando ela for aceita.", ephemeral: true });
+                interaction.client.channels.cache.find(channel => channel.id == channelsId.verification.vendedores).send({ embeds: [embed] }).then(msg => { msg.react("✅"); msg.react("❎"); msg.react("🔰"); })
             }
-
-
         }
 
     },
