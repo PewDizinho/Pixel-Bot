@@ -4,7 +4,7 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('cadastrar')
         .setDescription('Se cadastre!')
-      //  .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
+     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
         ,
     async execute(interaction) {
 
