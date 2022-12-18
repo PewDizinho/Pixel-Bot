@@ -4,8 +4,8 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('createitem')
         .setDescription('Crie um item!')
-       // .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
-        ,
+    // .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
+    ,
     async execute(interaction) {
 
         const embed = new EmbedBuilder()
@@ -58,6 +58,12 @@ module.exports = {
                     ]),
             );
         await interaction.reply({ content: `<@${interaction.member.user.id}>`, ephmeral: true, embeds: [embed], components: [row] });
+        const message = await interaction.fetchReply()
+        setTimeout(async () => {
+            message.delete();
+        }, 90 * 1000);
+
+
         // ['<:icone_build:890833814404874282>', '<:icone_design:891187765377654794>', '<:icone_mod:891187783727726634>', '<:icone_plugin:890834022744326174>', '<:icone_script:890834010211774484>', '<:icone_skript:891187753226735646>'];
     }
 }
