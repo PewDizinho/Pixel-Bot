@@ -15,6 +15,7 @@ const client = new Client({
 	],
 });
 
+
 client.cooldowns = new Collection();
 client.COOLDOWN_SECONDS = 10;
 //COMMANDS 
