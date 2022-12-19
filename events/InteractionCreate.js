@@ -143,16 +143,16 @@ module.exports = {
 
                     break;
                 case 'verification_deny_reason':
-                    // console.log(interaction.user);
-                    interaction.client.guilds.cache.get(interaction.message.guildId).channels.cache.get(channelsId.auditoria.vendedores).send({ content: `Negado por: ${interaction.user.tag} - \`${interaction.user.id}\` motivo: \`${interaction.fields.getTextInputValue("reason")}\``, embeds: (await interaction.message.channel.messages.fetch(interaction.message.id)).embeds })
-                    interaction.client.guilds.cache.get(interaction.message.guildId).members.cache.get((await interaction.message.channel.messages.fetch(interaction.message.id)).embeds[0].author.name).send(`Olá! Venho informar que sua solicitação para **vendedor** foi **negada** por ${interaction.user.tag} - \`${interaction.user.id}\` motivo: \`${interaction.fields.getTextInputValue("reason")}\``);
-                    interaction.reply({ content: "Solicitação negada! Sua mensagem foi enviada para o membro e foi salva na minha database!", ephemeral: true });
 
+                    interaction.client.guilds.cache.get(interaction.message.guildId).channels.cache.get(channelsId.auditoria.vendedores).send({ content: `Negado por: ${interaction.user.tag} - \`${interaction.user.id}\` motivo: \`${interaction.fields.getTextInputValue("reason")}\``, embeds: (await interaction.message.channel.messages.fetch(interaction.message.id)).embeds })
+                    await interaction.client.guilds.cache.get(interaction.message.guildId).members.cache.get((await interaction.message.channel.messages.fetch(interaction.message.id)).embeds[0].author.name).send(`Olá! Venho informar que sua solicitação para **vendedor** foi **negada** por ${interaction.user.tag} - \`${interaction.user.id}\` motivo: \`${interaction.fields.getTextInputValue("reason")}\``);
+                    interaction.message.delete();
+                    interaction.reply({ content: "Solicitação negada! Sua mensagem foi enviada para o membro e foi salva na minha database!", ephemeral: true });
                     break;
             }
 
         } else if (interaction.isButton()) {
-            console.log(interaction.customId);
+            // console.log(interaction.customId);
 
             switch (interaction.customId) {
                 case 'vendedor_submit_aceitar':
