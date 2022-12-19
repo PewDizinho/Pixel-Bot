@@ -10,6 +10,15 @@ module.exports = {
     ,
     async execute(interaction) {
         const categoryId = '1054100659718340649';
+
+        await interaction.guild.channels.cache.get("1054100659718340649").children.cache.forEach(channel => {
+            if (channel.name == `${interaction.options.getUser('target').discriminator}-${interaction.user.discriminator}` || channel.name == `${interaction.user.discriminator}-${interaction.options.getUser('target').discriminator}`) {
+                channel.delete();
+            }
+        }
+        );
+
+
         interaction.guild.channels.create({
             name: `${interaction.options.getUser('target').discriminator}-${interaction.user.discriminator}`,
             type: ChannelType.GuildText,
@@ -43,5 +52,8 @@ module.exports = {
                 },
             ],
         });
+
+
+        interaction.reply({ content: "Um canal para a conversa foi criado!", ephmeral: true });
     }
 }
