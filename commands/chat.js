@@ -4,10 +4,7 @@ module.exports = {
         .setName('chat')
         .setDescription('Crie um chat com outro membro de forma anônima!')
         .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
-        .addUserOption(option => option.setName('target').setDescription('The user').setRequired(true))
-
-
-    ,
+        .addUserOption(option => option.setName('target').setDescription('The user').setRequired(true)),
     async execute(interaction) {
         const categoryId = '1054100659718340649';
 

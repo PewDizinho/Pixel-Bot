@@ -1,13 +1,18 @@
-const { Client, Events, GatewayIntentBits, Collection } = require('discord.js');
+const { Client, Events, GatewayIntentBits, Collection, Partials } = require('discord.js');
 const { token, ownerId } = require('./config.json');
 const fs = require('node:fs');
 const path = require('node:path');
 const client = new Client({
 	intents: [
 		GatewayIntentBits.Guilds,
-
 		GatewayIntentBits.GuildMessages,
-		GatewayIntentBits.MessageContent,], presence: "dnd"
+		GatewayIntentBits.MessageContent,
+		GatewayIntentBits.GuildMessageReactions,
+	],
+	partials: [
+		Partials.Message,
+		Partials.Channel, Partials.Reaction,
+	],
 });
 
 client.cooldowns = new Collection();
@@ -34,9 +39,9 @@ for (const file of eventFiles) {
 	const filePath = path.join(eventsPath, file);
 	const event = require(filePath);
 	if (event.once) {
-		client.once(event.name, (...args) => event.execute(...args));
+		client.once(event.name, (...args) => event.execute(...args, client));
 	} else {
-		client.on(event.name, (...args) => event.execute(...args));
+		client.on(event.name, (...args) => event.execute(...args, client));
 	}
 }
 

@@ -105,13 +105,29 @@ module.exports = {
                     var embed = new EmbedBuilder()
                         .setColor(0x0099FF)
                         .setTitle('Cadastro Vendedor')
-                        .setDescription('Username \`\`\` ' + interaction.member.user.tag + '\`\`\`\n\nNick \`\`\`' + interaction.fields.getTextInputValue("nick") + '\`\`\`\n\nDescrição\`\`\`' + interaction.fields.getTextInputValue("description") + '\`\`\`\n ')
-                        .setFooter({ text: `| ❎ Negar | ✅ Aceitar | 🔰 Editar |`, iconURL: 'https://media.discordapp.net/attachments/1052329282069872650/1052329371165274132/Pixel_Coin_Blue.png?width=675&height=675' });
+                        .setAuthor({ name: interaction.member.user.id, iconURL: 'https://cdn.discordapp.com/attachments/1052329282069872650/1052329371165274132/Pixel_Coin_Blue.png' })
+                        .setDescription('ID: \`\`\` ' + interaction.member.user.id + '\`\`\`\n\n' + 'Username \`\`\` ' + interaction.member.user.tag + '\`\`\`\n\nNick \`\`\`' + interaction.fields.getTextInputValue("nick") + '\`\`\`\n\nDescrição\`\`\`' + interaction.fields.getTextInputValue("description") + '\`\`\`\n ')
+                        .setFooter(defaultFooter);
+                    var row = new ActionRowBuilder()
+                        .addComponents(
+                            new ButtonBuilder()
+                                .setCustomId('aceitar')
+                                .setLabel('Aceitar')
+                                .setStyle(ButtonStyle.Success),
+                            new ButtonBuilder()
+                                .setCustomId('negar')
+                                .setLabel('Negar')
+                                .setStyle(ButtonStyle.Danger),
+                            new ButtonBuilder()
+                                .setCustomId('editar')
+                                .setLabel('Editar')
+                                .setStyle(ButtonStyle.Primary),
+                        );
                     interaction.reply({ content: "Sua solicitação foi enviada para nossa equipe da staff! Irei te avisar na DM quando ela for aceita.", ephemeral: true });
-                    interaction.client.channels.cache.find(channel => channel.id == channelsId.verification.vendedores).send({ embeds: [embed] }).then(msg => { msg.react("✅"); msg.react("❎"); msg.react("🔰"); });
+                    interaction.client.channels.cache.find(channel => channel.id == channelsId.verification.vendedores).send({ embeds: [embed], components: [row] });//.then(msg => { msg.react("✅"); msg.react("❎"); msg.react("🔰"); });
                     break;
                 case 'item_submit':
-                    const row = new ActionRowBuilder()
+                    var row = new ActionRowBuilder()
                         .addComponents(
                             new ButtonBuilder()
                                 .setCustomId('aceitar')
