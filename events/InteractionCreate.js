@@ -3,11 +3,10 @@ const { channelsId, defaultFooter } = require('../config.json');
 module.exports = {
     name: Events.InteractionCreate,
     once: false,
-    execute(interaction) {
+    async execute(interaction) {
         if (interaction.isStringSelectMenu()) {
             const selected = interaction.values.join(', ');
-
-            console.log(interaction.customId);
+            //
             switch (interaction.customId) {
                 case 'info':
                     var embed, row;
@@ -105,23 +104,19 @@ module.exports = {
                     var embed = new EmbedBuilder()
                         .setColor(0x0099FF)
                         .setTitle('Cadastro Vendedor')
-                        .setAuthor({ name: interaction.member.user.id, iconURL: 'https://cdn.discordapp.com/attachments/1052329282069872650/1052329371165274132/Pixel_Coin_Blue.png' })
-                        .setDescription('ID: \`\`\` ' + interaction.member.user.id + '\`\`\`\n\n' + 'Username \`\`\` ' + interaction.member.user.tag + '\`\`\`\n\nNick \`\`\`' + interaction.fields.getTextInputValue("nick") + '\`\`\`\n\nDescrição\`\`\`' + interaction.fields.getTextInputValue("description") + '\`\`\`\n ')
+                        .setAuthor({ name: interaction.user.id, iconURL: 'https://cdn.discordapp.com/attachments/1052329282069872650/1052329371165274132/Pixel_Coin_Blue.png' })
+                        .setDescription('ID: \`\`\` ' + interaction.user.id + '\`\`\`\n\n' + 'Username \`\`\` ' + interaction.user.tag + '\`\`\`\n\nNick \`\`\`' + interaction.fields.getTextInputValue("nick") + '\`\`\`\n\nDescrição\`\`\`' + interaction.fields.getTextInputValue("description") + '\`\`\`\n ')
                         .setFooter(defaultFooter);
                     var row = new ActionRowBuilder()
                         .addComponents(
                             new ButtonBuilder()
-                                .setCustomId('aceitar')
+                                .setCustomId('vendedor_submit_aceitar')
                                 .setLabel('Aceitar')
                                 .setStyle(ButtonStyle.Success),
                             new ButtonBuilder()
-                                .setCustomId('negar')
+                                .setCustomId('vendedor_submit_negar')
                                 .setLabel('Negar')
-                                .setStyle(ButtonStyle.Danger),
-                            new ButtonBuilder()
-                                .setCustomId('editar')
-                                .setLabel('Editar')
-                                .setStyle(ButtonStyle.Primary),
+                                .setStyle(ButtonStyle.Danger)
                         );
                     interaction.reply({ content: "Sua solicitação foi enviada para nossa equipe da staff! Irei te avisar na DM quando ela for aceita.", ephemeral: true });
                     interaction.client.channels.cache.find(channel => channel.id == channelsId.verification.vendedores).send({ embeds: [embed], components: [row] });//.then(msg => { msg.react("✅"); msg.react("❎"); msg.react("🔰"); });
@@ -130,29 +125,65 @@ module.exports = {
                     var row = new ActionRowBuilder()
                         .addComponents(
                             new ButtonBuilder()
-                                .setCustomId('aceitar')
+                                .setCustomId('item_submit_aceitar')
                                 .setLabel('Aceitar')
                                 .setStyle(ButtonStyle.Success),
                             new ButtonBuilder()
-                                .setCustomId('negar')
+                                .setCustomId('item_submit_negar')
                                 .setLabel('Negar')
-                                .setStyle(ButtonStyle.Danger),
-                            new ButtonBuilder()
-                                .setCustomId('editar')
-                                .setLabel('Editar')
-                                .setStyle(ButtonStyle.Primary),
+                                .setStyle(ButtonStyle.Danger)
                         );
                     var embed = new EmbedBuilder()
                         .setColor(0x0099FF)
                         .setTitle('Solicitação de item')
-                        .setDescription('Username \`\`\`' + interaction.member.user.tag + '\`\`\`\n\nNome do Item \`\`\`' + interaction.fields.getTextInputValue("nome") + '\`\`\`\n\nVersão\`\`\`' + interaction.fields.getTextInputValue("version") + '\`\`\`\n ' + '\nDescrição\`\`\`' + interaction.fields.getTextInputValue("description") + '\`\`\`\n' + `\n[Link](${interaction.fields.getTextInputValue("file_URL")})\`\`\`` + interaction.fields.getTextInputValue("file_URL") + '\`\`\`\n ' + '\nTipo de item\`\`\`' + interaction.fields.getTextInputValue("itemType") + '\`\`\`\n ')
+                        .setDescription('Username \`\`\`' + interaction.user.member.tag + '\`\`\`\n\nNome do Item \`\`\`' + interaction.fields.getTextInputValue("nome") + '\`\`\`\n\nVersão\`\`\`' + interaction.fields.getTextInputValue("version") + '\`\`\`\n ' + '\nDescrição\`\`\`' + interaction.fields.getTextInputValue("description") + '\`\`\`\n' + `\n[Link](${interaction.fields.getTextInputValue("file_URL")})\`\`\`` + interaction.fields.getTextInputValue("file_URL") + '\`\`\`\n ' + '\nTipo de item\`\`\`' + interaction.fields.getTextInputValue("itemType") + '\`\`\`\n ')
                         .setFooter(defaultFooter);
                     interaction.reply({ content: "Sua solicitação foi enviada para nossa equipe da staff! Irei te avisar na DM quando ela for aceita.", ephemeral: true });
                     interaction.client.channels.cache.find(channel => channel.id == channelsId.verification.items).send({ embeds: [embed], components: [row] });
 
                     break;
+                case 'verification_deny_reason':
+                    // console.log(interaction.user);
+                    interaction.client.guilds.cache.get(interaction.message.guildId).channels.cache.get(channelsId.auditoria.vendedores).send({ content: `Negado por: ${interaction.user.tag} - \`${interaction.user.id}\` motivo: \`${interaction.fields.getTextInputValue("reason")}\``, embeds: (await interaction.message.channel.messages.fetch(interaction.message.id)).embeds })
+                    interaction.client.guilds.cache.get(interaction.message.guildId).members.cache.get((await interaction.message.channel.messages.fetch(interaction.message.id)).embeds[0].author.name).send(`Olá! Venho informar que sua solicitação para **vendedor** foi **negada** por ${interaction.user.tag} - \`${interaction.user.id}\` motivo: \`${interaction.fields.getTextInputValue("reason")}\``);
+                    interaction.reply({ content: "Solicitação negada! Sua mensagem foi enviada para o membro e foi salva na minha database!", ephemeral: true });
+
+                    break;
             }
 
+        } else if (interaction.isButton()) {
+            console.log(interaction.customId);
+
+            switch (interaction.customId) {
+                case 'vendedor_submit_aceitar':
+
+                    break;
+
+                case 'vendedor_submit_negar':
+
+                    const modal = new ModalBuilder()
+                        .setCustomId('verification_deny_reason')
+                        .setTitle('Negar Pedido de Verificação');
+
+                    modal.addComponents(
+                        new ActionRowBuilder().addComponents(
+                            new TextInputBuilder()
+                                .setCustomId('reason')
+                                .setLabel('Motivo')
+                                .setPlaceholder('Esse motivo será enviado para o membro')
+                                .setStyle(TextInputStyle.Paragraph)
+
+                        ),
+                        new ActionRowBuilder().addComponents(new TextInputBuilder()
+                            .setCustomId('improvement')
+                            .setLabel('Sugestão de melhora')
+                            .setPlaceholder('Ex: "Não utilize seu nome verdadeiro para a verificação')
+                            .setStyle(TextInputStyle.Paragraph))
+                    );
+                    interaction.showModal(modal);
+                    break;
+
+            }
         }
 
     },
