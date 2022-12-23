@@ -1,6 +1,6 @@
 const { Events, EmbedBuilder, ActionRowBuilder, StringSelectMenuBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, ButtonBuilder, ButtonStyle } = require('discord.js');
 const { channelsId, defaultFooter } = require('../config.json');
-
+const DataBaseSellers = require('../DataBase/vendedores.js');
 module.exports = {
     name: Events.InteractionCreate,
     once: false,
@@ -148,7 +148,7 @@ module.exports = {
                     interaction.client.guilds.cache.get(interaction.message.guildId).channels.cache.get(channelsId.auditoria.vendedores).send({ content: `Negado por: ${interaction.user.tag} - \`${interaction.user.id}\` motivo: \`${interaction.fields.getTextInputValue("reason")}\``, embeds: (await interaction.message.channel.messages.fetch(interaction.message.id)).embeds })
                     await interaction.client.guilds.cache.get(interaction.message.guildId).members.cache.get((await interaction.message.channel.messages.fetch(interaction.message.id)).embeds[0].author.name).send(`Olá! Venho informar que sua solicitação para **vendedor** foi **negada** por ${interaction.user.tag} - \`${interaction.user.id}\` motivo: \`${interaction.fields.getTextInputValue("reason")}\``);
                     interaction.message.delete();
-                    interaction.reply({ content: "Solicitação negada! Sua mensagem foi enviada para o membro e foi salva na minha database!", ephemeral: true });
+                    interaction.reply({ content: "Solicitação negada! Sua mensagem foi enviada para o membro e foi salva na minha DataBaseSellers!", ephemeral: true });
                     break;
             }
 
@@ -158,11 +158,29 @@ module.exports = {
             switch (interaction.customId) {
                 case 'vendedor_submit_aceitar':
                     const embed = (await interaction.message.channel.messages.fetch(interaction.message.id)).embeds[0];
-                    const memberId = embed.author.name;
-                    //     const memberObject = interaction.client.guilds.cache.get(interaction.message.guildId).member.cache.get(memberId);
-                    //   console.log(embed);
+                    const memberObject = interaction.client.guilds.cache.get(interaction.message.guildId).members.cache.get(embed.author.name);
+                    const embedInfo = embed.description.replace("+", ',').split("\n")
 
-                    
+                    await DataBaseSellers.create({
+                        UserId: memberObject.id,
+                        User: {
+                            username: memberObject.username,
+                            userDiscriminator: memberObject.discriminator
+                        },
+                        Info: {
+                            fakeNick: embedInfo[4].split("`")[3],
+                            description: embedInfo[6].split("`")[3],
+                            type: [false, false, false, false, false, false],
+                            verificatorId: interaction.user.id
+                        },
+                        Itens: []
+                    });
+
+                    interaction.client.guilds.cache.get(interaction.message.guildId).channels.cache.get(channelsId.auditoria.vendedores).send({ content: `Aceito por: ${interaction.user.tag} - \`${interaction.user.id}\``, embeds: (await interaction.message.channel.messages.fetch(interaction.message.id)).embeds })
+                    await interaction.client.guilds.cache.get(interaction.message.guildId).members.cache.get((await interaction.message.channel.messages.fetch(interaction.message.id)).embeds[0].author.name).send(`Olá! Venho informar que sua solicitação para **vendedor** foi **aceita** por ${interaction.user.tag} - \`${interaction.user.id}\``);
+                    interaction.message.delete();
+                    interaction.reply({ content: "Solicitação aceita! O membro foi avisado e essa solicitação foi salva na minha DataBase!", ephemeral: true });
+
                     break;
 
                 case 'vendedor_submit_negar':
