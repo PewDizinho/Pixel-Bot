@@ -23,11 +23,6 @@ module.exports = {
                             .setLabel('Motivo')
                             .setPlaceholder('Qual o motivo para você negar esse pedido? (Esse motivo será enviado para o membro)')
                             .setStyle(TextInputStyle.Paragraph),
-                        new TextInputBuilder()
-                            .setCustomId('improvement')
-                            .setLabel('Sugestão de melhora')
-                            .setPlaceholder('"Não use seu nick de verdade na verificação!"')
-                            .setStyle(TextInputStyle.Short)
                     )
                 );
                         user.showModal(modal);
