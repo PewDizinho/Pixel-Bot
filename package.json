@@ -17,7 +17,9 @@
   },
   "homepage": "https://github.com/PewDizinho/Pixel-Bot#readme",
   "dependencies": {
+    "chalk": "^4.1.2",
     "discord.js": "^14.7.1",
-    "mongoose": "^6.8.1"
+    "mongoose": "^6.8.1",
+    "node-fetch": "^2.6.1"
   }
 }

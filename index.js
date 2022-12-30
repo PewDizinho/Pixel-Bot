@@ -1,5 +1,6 @@
+
 const { Client, Events, GatewayIntentBits, Collection, Partials } = require('discord.js');
-const { token, ownerId, dataBaseUrl } = require('./config.json');
+const { token, ownerId } = require('./config.json');
 const fs = require('node:fs');
 const path = require('node:path');
 const client = new Client({
@@ -15,15 +16,6 @@ const client = new Client({
 	],
 });
 
-
-
-//Database mongo
-const { connect } = require("mongoose");
-
-
-connect(dataBaseUrl, {}).then(() => console.log("DataBase connected"));
-
-//Database mongo
 
 
 

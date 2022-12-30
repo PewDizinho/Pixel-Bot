@@ -158,7 +158,7 @@ module.exports = {
             switch (interaction.customId) {
                 case 'vendedor_submit_aceitar':
                     const embed = (await interaction.message.channel.messages.fetch(interaction.message.id)).embeds[0];
-                    const memberObject = interaction.client.guilds.cache.get(interaction.message.guildId).members.cache.get(embed.author.name);
+                    const memberObject = interaction.client.guilds.cache.get(interaction.message.guildId).members.cache.image.pngget(embed.author.name);
                     const embedInfo = embed.description.replace("+", ',').split("\n")
 
                     await DataBaseSellers.create({
