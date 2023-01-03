@@ -1,16 +1,11 @@
 const { Events } = require('discord.js');
+const fs = require('node:fs');
 const chalk = require('chalk');
 const { version, dataBaseUrl } = require('../config.json');
 module.exports = {
     name: Events.ClientReady,
     once: true,
     async execute(client) {
-        const fs = require('node:fs');
-
-
-
-
-
         console.clear();
         console.log(chalk.cyan('Tenha um dia PixelizaLindo!'));
         console.log(chalk.grey('----------------------------'));

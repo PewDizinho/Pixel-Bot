@@ -1,5 +1,5 @@
 const { Events, EmbedBuilder, ActionRowBuilder, StringSelectMenuBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, ButtonBuilder, ButtonStyle } = require('discord.js');
-const { channelsId, defaultFooter } = require('../config.json');
+const { channelsId, defaultFooter, rolesId } = require('../config.json');
 const DataBaseSellers = require('../DataBase/vendedores.js');
 module.exports = {
     name: Events.InteractionCreate,
@@ -158,7 +158,7 @@ module.exports = {
             switch (interaction.customId) {
                 case 'vendedor_submit_aceitar':
                     const embed = (await interaction.message.channel.messages.fetch(interaction.message.id)).embeds[0];
-                    const memberObject = interaction.client.guilds.cache.get(interaction.message.guildId).members.cache.image.pngget(embed.author.name);
+                    const memberObject = interaction.client.guilds.cache.get(interaction.message.guildId).members.cache.get(embed.author.name);
                     const embedInfo = embed.description.replace("+", ',').split("\n")
 
                     await DataBaseSellers.create({
@@ -178,6 +178,7 @@ module.exports = {
 
                     interaction.client.guilds.cache.get(interaction.message.guildId).channels.cache.get(channelsId.auditoria.vendedores).send({ content: `Aceito por: ${interaction.user.tag} - \`${interaction.user.id}\``, embeds: (await interaction.message.channel.messages.fetch(interaction.message.id)).embeds })
                     await interaction.client.guilds.cache.get(interaction.message.guildId).members.cache.get((await interaction.message.channel.messages.fetch(interaction.message.id)).embeds[0].author.name).send(`Olá! Venho informar que sua solicitação para **vendedor** foi **aceita** por ${interaction.user.tag} - \`${interaction.user.id}\``);
+                    await interaction.client.guilds.cache.get(interaction.message.guildId).members.cache.get((await interaction.message.channel.messages.fetch(interaction.message.id)).embeds[0].author.name).roles.add(interaction.client.guilds.cache.get(interaction.message.guildId).roles.cache.find(role => role.id == rolesId.verificado));
                     interaction.message.delete();
                     interaction.reply({ content: "Solicitação aceita! O membro foi avisado e essa solicitação foi salva na minha DataBase!", ephemeral: true });
 
