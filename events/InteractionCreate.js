@@ -106,7 +106,7 @@ module.exports = {
                         .setColor(0x0099FF)
                         .setTitle('Cadastro Vendedor')
                         .setAuthor({ name: interaction.user.id, iconURL: 'https://cdn.discordapp.com/attachments/1052329282069872650/1052329371165274132/Pixel_Coin_Blue.png' })
-                        .setDescription('ID: \`\`\` ' + interaction.user.id + '\`\`\`\n\n' + 'Username \`\`\` ' + interaction.user.tag + '\`\`\`\n\nNick \`\`\`' + interaction.fields.getTextInputValue("nick") + '\`\`\`\n\nDescrição\`\`\`' + interaction.fields.getTextInputValue("description") + '\`\`\`\n ')
+                        .setDescription('ID: \`\`\` ' + interaction.user.id + '\`\`\`\n\n' + 'Username \`\`\` ' + interaction.user.tag + '\`\`\`\n\nNick \`\`\`' + interaction.fields.getTextInputValue("nick") + '\`\`\`\n\nDescrição\`\`\`' + interaction.fields.getTextInputValue("description") + '\`\`\`\n\nChave PIX\`\`\`' + interaction.fields.getTextInputValue("pix") + '\`\`\`\n\nConcordou com TOS\`\`\`' + interaction.fields.getTextInputValue("tos") + '\`\`\`\n')
                         .setFooter(defaultFooter);
                     var row = new ActionRowBuilder()
                         .addComponents(
