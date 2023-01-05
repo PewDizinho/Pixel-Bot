@@ -2,6 +2,7 @@ const { Events } = require('discord.js');
 const fs = require('node:fs');
 const chalk = require('chalk');
 const { version, dataBaseUrl } = require('../config.json');
+const mp = require("../util/mercadopago.js");
 module.exports = {
     name: Events.ClientReady,
     once: true,
@@ -20,7 +21,7 @@ module.exports = {
             console.log(`${chalk.grey('DataBase')} ${chalk.green("Connected!")}`)
         );
 
-
+        mp.execute(client);
 
 
     },
