@@ -1,27 +1,30 @@
 
-const { mercadoPago } = require("../config.json");
+const { mercadoPago, defaultFooter } = require("../config.json");
 const fs = require("fs");
 let https = require('https');
+const { EmbedBuilder } = require('discord.js');
+
 module.exports = {
-    async comprar(client, comprador, item) {
+    comprar(interaction, comprador, item) {
         var mercadopago = require('mercadopago');
         mercadopago.configurations.setAccessToken(mercadoPago.token);
 
         var payment_data = {
-            transaction_amount: 0.05,
+            transaction_amount: item.price,
             description: item.name,
             payment_method_id: 'pix',
             payer: {
                 email: comprador.email,
                 first_name: comprador.username,
-                last_name: comprador.id,
+                last_name: comprador.username,
                 identification: {
-                    type: 'CPF',
-                    number: comprador.id
-                }
-            }
-        };
+                    number: '19119119100',
+                    type: "CPF"
+                },
+            },
 
+        };
+        console.log(payment_data)
         mercadopago.payment.create(payment_data).then(function (data) {
             const id = data.response.id;
             var options = {
@@ -42,8 +45,13 @@ module.exports = {
                     let parsedData = JSON.parse(data);
                     let base64Image = parsedData.point_of_interaction.transaction_data.qr_code_base64.split(';base64,').pop();
                     fs.writeFileSync('assets/image.png', base64Image, { encoding: 'base64' }, function (err) { console.log('File created'); });
-                    client.guilds.cache.get("830555222752362498").channels.cache.get("830568759466786817").send({ content: "yo", files: ['./assets/image.png'] });
-
+                    const embed = new EmbedBuilder()
+                        .setColor(0x0099FF)
+                        .setTitle(`Pagamento N°: ${id}`)
+                        .setDescription("Escaneie o código PIX acima e realize o pagamento, após isso, execute `/verificarCompra {ID}` para verificar o status do seu pagamento")
+                        .setFooter(defaultFooter);
+                    interaction.reply({ content: "yo2", files: ['./assets/image.png'], embeds: [embed], ephemeral: true, });
+                    return true;
                 });
 
             })
@@ -51,7 +59,7 @@ module.exports = {
 
 
     },
-    async verificarCompra(client, id) {
+    verificarCompra(interaction, id) {
         var options = {
             hostname: 'api.mercadopago.com',
             port: 443,
@@ -68,12 +76,13 @@ module.exports = {
             });
             resp.on('end', () => {
                 let parsedData = JSON.parse(data);
-                if(parsedData.status == "approved"){
-                    //yeye
-                }else if(parsedData.status == "pending"){
-                    //nono
+                if (parsedData.status == "approved") {
+                    interaction.reply({ content: "Seu pagamento foi confirmado!", ephemeral: true, })
+
+                } else if (parsedData.status == "pending") {
+                    interaction.reply({ content: "Seu pagamento não foi confirmado, caso você já tenha realizado o pagamento, entrar em contato com PewDizinho#3014", ephemeral: true, })
+
                 }
-               // client.guilds.cache.get("830555222752362498").channels.cache.get("830568759466786817").send({ content: "yo", files: ['./assets/image.png'] });
 
             });
 
