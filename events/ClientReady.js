@@ -20,9 +20,6 @@ module.exports = {
         connect(dataBaseUrl, {}).then(() =>
             console.log(`${chalk.grey('DataBase')} ${chalk.green("Connected!")}`)
         );
-
-        mp.execute(client);
-
-
+        mp.verificarCompra(client, 53331258276);
     },
 };
