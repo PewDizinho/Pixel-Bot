@@ -20,8 +20,6 @@ const client = new Client({
 
 
 
-client.cooldowns = new Collection();
-client.COOLDOWN_SECONDS = 10;
 //COMMANDS 
 client.commands = new Collection();
 const commandsPath = path.join(__dirname, 'commands');
@@ -50,8 +48,16 @@ for (const file of eventFiles) {
 	}
 }
 
+client.cooldowns = new Collection();
+client.COOLDOWN_SECONDS = 5;
+
 client.on(Events.InteractionCreate, async interaction => {
 	if (!interaction.isChatInputCommand()) return;
+	const command = interaction.client.commands.get(interaction.commandName);
+	if (!command) {
+		console.error(`Nenhum comando com o nome de: ${interaction.commandName} foi encontrado.`);
+		return;
+	}
 	if (client.cooldowns.has(interaction.user.id) && interaction.user.id != ownerId) {
 		interaction.reply({ content: "Espere um pouco para executar outro comando!", ephemeral: true });
 		return;
@@ -61,11 +67,7 @@ client.on(Events.InteractionCreate, async interaction => {
 		client.cooldowns.delete(interaction.user.id);
 	}, client.COOLDOWN_SECONDS * 1000);
 
-	const command = interaction.client.commands.get(interaction.commandName);
-	if (!command) {
-		console.error(`No command matching ${interaction.commandName} was found.`);
-		return;
-	}
+
 	try {
 		await command.execute(interaction);
 	} catch (error) {
