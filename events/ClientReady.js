@@ -1,7 +1,8 @@
 const { Events } = require('discord.js');
 const fs = require('node:fs');
 const chalk = require('chalk');
-const { version, dataBaseUrl } = require('../config.json');
+const { version } = require('../config.json');
+
 module.exports = {
     name: Events.ClientReady,
     once: true,
@@ -14,10 +15,9 @@ module.exports = {
         console.log(`${chalk.grey('Versão')} ${chalk.green(version)}`);
         console.log(`${chalk.grey('Comandos')} ${chalk.green(fs.readdirSync('./commands').filter(file => file.endsWith('.js')).length)}`)
         console.log(`${chalk.grey('Eventos')} ${chalk.green(fs.readdirSync('./events').filter(file => file.endsWith('.js')).length)}`)
-        const { connect, default: mongoose } = require("mongoose");
-        mongoose.set('strictQuery', true);
-        connect(dataBaseUrl, {}).then(() =>
-            console.log(`${chalk.grey('DataBase')} ${chalk.green("Connected!")}`)
-        );
+
+
+        // console.log(`${chalk.grey('DataBase')} ${chalk.green("Connected!")}`)
+
     },
 };

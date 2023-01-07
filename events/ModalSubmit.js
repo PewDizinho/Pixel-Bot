@@ -1,8 +1,9 @@
 
 const PixelEmbed = require("../util/embed.js");
-const { ActionRowBuilder, ButtonBuilder} = require('discord.js');
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const { channelsId } = require("../config.json");
 module.exports = {
-    async export(interaction) {
+    async execute(interaction) {
         switch (interaction.customId) {
             case 'cadastro_vendedor':
                 var embed = new PixelEmbed({ author: interaction.user.id.toString(), description: 'ID: \`\`\` ' + interaction.user.id + '\`\`\`\n\n' + 'Username \`\`\` ' + interaction.user.tag + '\`\`\`\n\nNick \`\`\`' + interaction.fields.getTextInputValue("nick") + '\`\`\`\n\nDescrição\`\`\`' + interaction.fields.getTextInputValue("description") + '\`\`\`\n\nChave PIX\`\`\`' + interaction.fields.getTextInputValue("pix") + '\`\`\`\n\nConcordou com TOS\`\`\`' + interaction.fields.getTextInputValue("tos") + '\`\`\`\n', title: 'Cadastro Vendedor' }).embed

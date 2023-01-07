@@ -21,6 +21,7 @@
     "discord.js": "^14.7.1",
     "faz-um-pix": "^2.0.2",
     "jimp": "^0.16.2",
+    "lowdb": "^1.0.0",
     "mercadopago": "^1.5.14",
     "mongoose": "^6.8.1",
     "node-fetch": "^2.6.1"

@@ -1,6 +1,3 @@
 # Changelog
 
-- Separado eventos em sub-categorias do `./events/InteractionCreate.js`
-- `./events/Button.js` criado
-- `./events/ModalSubmit.js` criado
-- `./events/StringSelectMenu.js` criado
+- Me irritei com MongoDB, tenho que estudar melhor isso mas não agora, voltei para uma versão antiga do LOWDB que eu usava na época da v9, e tá funcionando por hora
