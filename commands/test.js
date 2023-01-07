@@ -8,7 +8,7 @@ module.exports = {
         .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
 
     async execute(interaction) {
-        var embed = new PixelEmbed("Cool Title", "Cool Description", "pixel_community", null, null, null, null, true).embed;
-        interaction.reply({ content: "y", embeds: [embed] });
+
+        interaction.reply({ content: "y", embeds: [new PixelEmbed({ author: "Cool Title", description: "Cool Description", image: "pixel_community", title: true}).embed] });
     }
 }

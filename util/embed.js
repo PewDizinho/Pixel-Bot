@@ -2,7 +2,7 @@ const { EmbedBuilder } = require('discord.js');
 const { defaultFooter } = require("../config.json");
 module.exports = class PixelEmbed {
 
-    constructor(author, description, image, thumbnail, footer, link, fields, title) {
+    constructor({ author, description, image, thumbnail, footer, link, fields, title }) {
         this.author = author;
         this.description = description;
         this.image = image;

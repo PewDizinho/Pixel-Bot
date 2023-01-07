@@ -14,7 +14,7 @@ module.exports = {
                     var embed, row;
                     switch (selected) {
                         case "pixel_store":
-                            embed = new PixelEmbed('Pixel Store', 'A Pixel Store é o nosso site onde você pode vender seu trabalho no minecraft (como construções, mods, plugins, scripts, skripts, texturas ou outros itens de design) para que donos de servidores comprem! Infelizmente, ainda estamos desenvolvendo o site, mas fique esperto! Iremos anunciar qualquer adição no canal <#891465741851848725>!', 'pixel_store').embed
+                            embed = new PixelEmbed({ author: 'Pixel Store', description: 'A Pixel Store é o nosso site onde você pode vender seu trabalho no minecraft (como construções, mods, plugins, scripts, skripts, texturas ou outros itens de design) para que donos de servidores comprem! Infelizmente, ainda estamos desenvolvendo o site, mas fique esperto! Iremos anunciar qualquer adição no canal <#891465741851848725>!', image: 'pixel_store' }).embed
 
                             row = new ActionRowBuilder()
                                 .addComponents(
@@ -33,7 +33,8 @@ module.exports = {
                                 );
                             break;
                         case "pixel_community":
-                            embed = new PixelEmbed('Pixel Community', 'A Pixel Community é, como nosso nome já diz, a nossa comunidade! Onde donos de outros servidores podem se ajudar na criação e desenvolvimento de projetos envolvendo minecraft! Tem alguma dúvida? Acha que consegue ajudar alguém? Nossa comunidade é formada por vocês, então contamos com vocês para fazer dela um lugar incrível para todos!', 'https://media.discordapp.net/attachments/1052329282069872650/1052329369890205787/Pixel_Community.png?width=473&height=473').embed;
+                            embed = new PixelEmbed({ author: 'Pixel Community', description: 'A Pixel Community é, como nosso nome já diz, a nossa comunidade! Onde donos de outros servidores podem se ajudar na criação e desenvolvimento de projetos envolvendo minecraft! Tem alguma dúvida? Acha que consegue ajudar alguém? Nossa comunidade é formada por vocês, então contamos com vocês para fazer dela um lugar incrível para todos!', image: 'https://media.discordapp.net/attachments/1052329282069872650/1052329369890205787/Pixel_Community.png?width=473&height=473' }).embed;
+
 
                             row = new ActionRowBuilder()
                                 .addComponents(
@@ -96,7 +97,7 @@ module.exports = {
         } else if (interaction.isModalSubmit()) {
             switch (interaction.customId) {
                 case 'cadastro_vendedor':
-                    var embed = new PixelEmbed(interaction.user.id.toString(), 'ID: \`\`\` ' + interaction.user.id + '\`\`\`\n\n' + 'Username \`\`\` ' + interaction.user.tag + '\`\`\`\n\nNick \`\`\`' + interaction.fields.getTextInputValue("nick") + '\`\`\`\n\nDescrição\`\`\`' + interaction.fields.getTextInputValue("description") + '\`\`\`\n\nChave PIX\`\`\`' + interaction.fields.getTextInputValue("pix") + '\`\`\`\n\nConcordou com TOS\`\`\`' + interaction.fields.getTextInputValue("tos") + '\`\`\`\n', null, null, null, null, null, null, 'Cadastro Vendedor').embed
+                    var embed = new PixelEmbed({ author: interaction.user.id.toString(), description: 'ID: \`\`\` ' + interaction.user.id + '\`\`\`\n\n' + 'Username \`\`\` ' + interaction.user.tag + '\`\`\`\n\nNick \`\`\`' + interaction.fields.getTextInputValue("nick") + '\`\`\`\n\nDescrição\`\`\`' + interaction.fields.getTextInputValue("description") + '\`\`\`\n\nChave PIX\`\`\`' + interaction.fields.getTextInputValue("pix") + '\`\`\`\n\nConcordou com TOS\`\`\`' + interaction.fields.getTextInputValue("tos") + '\`\`\`\n', title: 'Cadastro Vendedor' }).embed
 
                     var row = new ActionRowBuilder()
                         .addComponents(
@@ -128,7 +129,7 @@ module.exports = {
                     interaction.reply({ content: "Sua solicitação foi enviada para nossa equipe da staff! Irei te avisar na DM quando um membro da nossa equipe.", ephemeral: true });
                     interaction.client.channels.cache.find(channel => channel.id == channelsId.verification.items).send({
                         embeds: [
-                            new PixelEmbed('Solicitação de item', 'Username \`\`\`' + interaction.user.tag + '\`\`\`\n\nNome do Item \`\`\`' + interaction.fields.getTextInputValue("nome") + '\`\`\`\n\nPreço\`\`\`' + interaction.fields.getTextInputValue("price") + '\`\`\`\n ' + '\nDescrição\`\`\`' + interaction.fields.getTextInputValue("description") + '\`\`\`\n' + `\n[Link](${interaction.fields.getTextInputValue("file_URL")})\`\`\`` + interaction.fields.getTextInputValue("file_URL") + '\`\`\`\n ' + '\nTipo de item\`\`\`' + interaction.fields.getTextInputValue("itemType") + '\`\`\`\n ').embed], components: [row]
+                            new PixelEmbed({ author: interaction.client.id, description: 'Username \`\`\`' + interaction.user.tag + '\`\`\`\n\nNome do Item \`\`\`' + interaction.fields.getTextInputValue("nome") + '\`\`\`\n\nPreço\`\`\`' + interaction.fields.getTextInputValue("price") + '\`\`\`\n ' + '\nDescrição\`\`\`' + interaction.fields.getTextInputValue("description") + '\`\`\`\n' + `\n[Link](${interaction.fields.getTextInputValue("file_URL")})\`\`\`` + interaction.fields.getTextInputValue("file_URL") + '\`\`\`\n ' + '\nTipo de item\`\`\`' + interaction.fields.getTextInputValue("itemType") + '\`\`\`\n ' }).embed], components: [row]
                     });
 
                     break;
@@ -136,7 +137,7 @@ module.exports = {
 
                     interaction.client.guilds.cache.get(interaction.message.guildId).channels.cache.get(channelsId.auditoria.vendedores).send({ content: `Negado por: ${interaction.user.tag} - \`${interaction.user.id}\` motivo: \`${interaction.fields.getTextInputValue("reason")}\``, embeds: (await interaction.message.channel.messages.fetch(interaction.message.id)).embeds })
 
-                    await interaction.client.guilds.cache.get(interaction.message.guildId).members.cache.get((await interaction.message.channel.messages.fetch(interaction.message.id)).embeds[0].author.name).send({ content: '', embeds: [new PixelEmbed("Solicitação NEGADA", `Olá! Venho informar que sua solicitação para **vendedor** foi **negada** por ${interaction.user.tag} - \`${interaction.user.id}\` motivo: \`${interaction.fields.getTextInputValue("reason")}\``).embed] });
+                    await interaction.client.guilds.cache.get(interaction.message.guildId).members.cache.get((await interaction.message.channel.messages.fetch(interaction.message.id)).embeds[0].author.name).send({ content: '', embeds: [new PixelEmbed({ author: "Solicitação NEGADA", description: `Olá! Venho informar que sua solicitação para **vendedor** foi **negada** por ${interaction.user.tag} - \`${interaction.user.id}\` motivo: \`${interaction.fields.getTextInputValue("reason")}\`` }).embed] });
                     interaction.message.delete();
                     interaction.reply({ content: "Solicitação negada! Sua mensagem foi enviada para o membro e foi salva na minha DataBaseSellers!", ephemeral: true });
                     break;
@@ -194,6 +195,15 @@ module.exports = {
                     );
                     interaction.showModal(modal);
                     break;
+
+                case ' item_submit_aceitar':
+
+                    break;
+                case ' item_submit_negar':
+
+                    break;
+
+
             }
         }
 
