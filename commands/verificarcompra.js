@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits } = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 const MP = require("../util/mercadopago.js");
 
 module.exports = {
@@ -14,6 +14,5 @@ module.exports = {
 
     async execute(interaction) {
         MP.verificarCompra(interaction, interaction.options.getNumber("id"));
-    
     }
 }

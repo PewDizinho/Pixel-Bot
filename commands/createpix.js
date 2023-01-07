@@ -24,6 +24,5 @@ module.exports = {
                 price: interaction.options.getNumber("valor")
             });
 
-        //   await interaction.reply({ content: `Pronto! Sua mensagem foi enviada em ${interaction.options.getChannel("channel")}`, ephemeral: true, })
     }
 }

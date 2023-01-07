@@ -1,5 +1,5 @@
-const { SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits } = require('discord.js');
-
+const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
+const PixelEmbed = require('../util/embed.js');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('broadcast')
@@ -17,19 +17,17 @@ module.exports = {
             option.setName('message')
                 .setDescription('A mensagem para ser anunciada')
                 .setRequired(true))
+        .addRoleOption(option =>
+            option.setName('role')
+                .setDescription('Uma role para ser mencionada')
+        )
         .addStringOption(option =>
             option.setName('image')
                 .setDescription('Um link de uma imagem para aparecer')),
-
     async execute(interaction) {
-        const embed = new EmbedBuilder()
-            .setColor(0x0099FF)
-            .setTitle(interaction.options.getString('titulo'))
-            .setDescription(interaction.options.getString('message').replace(/{breakline}/g, '\n'))
-            .setImage(interaction.options.getString('image'))
-            .setFooter({ text: `Anunciado por: ${interaction.member.user.tag}`, iconURL: interaction.user.avatarURL() })
-            ;
-        interaction.options.getChannel('channel').send({ content: '', embeds: [embed] });
+        interaction.options.getChannel('channel').send({
+            content: (interaction.options.getRole('role') ? `<@&${interaction.options.getRole('role').id}>` : ''), embeds: [new PixelEmbed(interaction.options.getString('titulo'), interaction.options.getString('message').replace(/{breakline}/g, '\n'), interaction.options.getString('image'), { text: `Anunciado por: ${interaction.member.user.tag}`, iconURL: interaction.user.avatarURL() })]
+        });
         await interaction.reply({ content: `Pronto! Sua mensagem foi enviada em ${interaction.options.getChannel("channel")}`, ephemeral: true, })
     }
 }

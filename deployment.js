@@ -26,7 +26,7 @@ const rest = new REST({ version: '10' }).setToken(token);
 			{ body: commands },
 		);
 
-		console.log(`${data.length} Comandos carregados com sucesso!.`);
+		console.log(`${data.length} Comandos carregados com sucesso!`);
 	} catch (error) {
 		// And of course, make sure you catch and log any errors!
 		console.error(error);

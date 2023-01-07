@@ -1,20 +1,13 @@
-const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, PermissionFlagsBits, StringSelectMenuBuilder } = require('discord.js');
-const { defaultFooter } = require("../config.json");
+const { SlashCommandBuilder, ActionRowBuilder, PermissionFlagsBits, StringSelectMenuBuilder } = require('discord.js');
+const PixelEmbed = require('../util/embed');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('createitem')
         .setDescription('Crie um item!')
-   .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
+        .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
     ,
     async execute(interaction) {
 
-        const embed = new EmbedBuilder()
-            .setColor(0x0099FF)
-            .setTitle('Pixel Store')
-            .setThumbnail('https://media.discordapp.net/attachments/1052329282069872650/1052329370305450115/Pixel_Store.png?width=675&height=675')
-            .setDescription('Enquanto nosso site não fica pronto, você pode realizar vendas pelo nosso discord!\n\n❗❗ **Atenção! Leia as [informações](https://discord.com/channels/830555222752362498/1052673481373917324) sobre vendas antes antes de utilizar esse comando!**❗❗\n\n```Selecione a categoria do seu produto:```\n<:icone_build:890833814404874282> Build\n<:icone_design:891187765377654794> Design\n<:icone_mod:891187783727726634> Mod\n<:icone_plugin:890834022744326174> Plugin\n<:icone_script:890834010211774484> Script\n<:icone_skript:891187753226735646> Skript')
-            .setFooter(defaultFooter)
-            .setTimestamp();
 
 
         const row = new ActionRowBuilder()
@@ -57,7 +50,7 @@ module.exports = {
                         },
                     ]),
             );
-        await interaction.reply({ content: `<@${interaction.member.user.id}>`, ephmeral: true, embeds: [embed], components: [row] });
+        await interaction.reply({ content: `<@${interaction.member.user.id}>`, ephmeral: true, embeds: [new PixelEmbed('Pixel Store', 'Enquanto nosso site não fica pronto, você pode realizar vendas pelo nosso discord!\n\n❗❗ **Atenção! Leia as [informações](https://discord.com/channels/830555222752362498/1052673481373917324) sobre vendas antes antes de utilizar esse comando!**❗❗\n\n```Selecione a categoria do seu produto:```\n<:icone_build:890833814404874282> Build\n<:icone_design:891187765377654794> Design\n<:icone_mod:891187783727726634> Mod\n<:icone_plugin:890834022744326174> Plugin\n<:icone_script:890834010211774484> Script\n<:icone_skript:891187753226735646> Skript', null, 'pixel_store').embed], components: [row] });
         const message = await interaction.fetchReply()
         setTimeout(async () => {
             message.delete();

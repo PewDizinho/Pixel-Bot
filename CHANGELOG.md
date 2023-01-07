@@ -1,5 +1,5 @@
 # Changelog
 
-- Comandos de testes para Criação e verificação de pagamentos Pix -> MercadoPago criadas
-- https://www.youtube.com/watch?v=mWmYv6P4-IE
-- Modificações dentro do arquivo `./util/mercadopago.js`
+- Criação de um arquivo para comandos genéricos de teste futuros
+- Criação de uma classe em `./util/embed.js` para facilitação e otimização no código
+- Edição de todos arquivos que utilizavam embeds para a nova versão
