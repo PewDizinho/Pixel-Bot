@@ -38,24 +38,13 @@ module.exports = class PixelEmbed {
     }
 
     assetLink(name) {
-        let link = false;
-        switch (name) {
-            case "pixel_community":
-                link = "https://cdn.discordapp.com/attachments/1052329282069872650/1052329369890205787/Pixel_Community.png";
-                break;
-            case "pixel_store":
-                link = "https://cdn.discordapp.com/attachments/1052329282069872650/1052329370305450115/Pixel_Store.png";
-                break;
-            case "coin_pink":
-                link = "https://cdn.discordapp.com/attachments/1052329282069872650/1052329370758418552/Pixel_Coin_Pink.png";
-                break;
-            case "coin_blue":
-                link = "https://cdn.discordapp.com/attachments/1052329282069872650/1052329371165274132/Pixel_Coin_Blue.png";
-                break;
-            case "coin_green":
-                link = "https://cdn.discordapp.com/attachments/1052329282069872650/1052329371542769814/Pixel_Coin_Green.png";
-                break;
+        let links = {
+            "pixel_community": "https://cdn.discordapp.com/attachments/1052329282069872650/1052329369890205787/Pixel_Community.png",
+            "pixel_store": "https://cdn.discordapp.com/attachments/1052329282069872650/1052329370305450115/Pixel_Store.png",
+            "coin_pink": "https://cdn.discordapp.com/attachments/1052329282069872650/1052329370758418552/Pixel_Coin_Pink.png",
+            "coin_blue": "https://cdn.discordapp.com/attachments/1052329282069872650/1052329371165274132/Pixel_Coin_Blue.png",
+            "coin_green": "https://cdn.discordapp.com/attachments/1052329282069872650/1052329371542769814/Pixel_Coin_Green.png"
         }
-        return link;
+        return links[name];
     }
 }
