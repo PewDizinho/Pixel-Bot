@@ -7,9 +7,6 @@ module.exports = {
         .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
     ,
     async execute(interaction) {
-
-
-
         const row = new ActionRowBuilder()
             .addComponents(
                 new StringSelectMenuBuilder()

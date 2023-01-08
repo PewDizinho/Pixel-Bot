@@ -4,10 +4,13 @@ const { ActionRowBuilder, StringSelectMenuBuilder, ModalBuilder, TextInputBuilde
 module.exports = {
     execute(interaction) {
         //
+        const selected = interaction.values.join(', ');
+
         switch (interaction.customId) {
+
             case 'info':
                 var embed, row;
-                switch (interaction.values.join(', ')) {
+                switch (selected) {
                     case "pixel_store":
                         embed = new PixelEmbed({ author: 'Pixel Store', description: 'A Pixel Store é o nosso site onde você pode vender seu trabalho no minecraft (como construções, mods, plugins, scripts, skripts, texturas ou outros itens de design) para que donos de servidores comprem! Infelizmente, ainda estamos desenvolvendo o site, mas fique esperto! Iremos anunciar qualquer adição no canal <#891465741851848725>!', image: 'pixel_store' }).embed
 

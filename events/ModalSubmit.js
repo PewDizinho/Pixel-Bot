@@ -46,7 +46,19 @@ module.exports = {
 
                 interaction.client.guilds.cache.get(interaction.message.guildId).channels.cache.get(channelsId.auditoria.vendedores).send({ content: `Negado por: ${interaction.user.tag} - \`${interaction.user.id}\` motivo: \`${interaction.fields.getTextInputValue("reason")}\``, embeds: (await interaction.message.channel.messages.fetch(interaction.message.id)).embeds })
 
-                await interaction.client.guilds.cache.get(interaction.message.guildId).members.cache.get((await interaction.message.channel.messages.fetch(interaction.message.id)).embeds[0].author.name).send({ content: '', embeds: [new PixelEmbed({ author: "Solicitação NEGADA", description: `Olá! Venho informar que sua solicitação para **vendedor** foi **negada** por ${interaction.user.tag} - \`${interaction.user.id}\` motivo: \`${interaction.fields.getTextInputValue("reason")}\`` }).embed] });
+                await interaction.client.guilds.cache.get(interaction.message.guildId).members.cache.get((await interaction.message.channel.messages.fetch(interaction.message.id)).embeds[0].author.name).send({
+                    content: '', embeds: [
+                        new PixelEmbed(
+                            {
+                                author: "Solicitação NEGADA",
+                                description: `Olá! Venho informar que sua solicitação para **vendedor** foi **negada** por ${interaction.user.tag} - \`${interaction.user.id}\``,
+                                fields: [
+                                    { name: 'Motivo', value: `\`${interaction.fields.getTextInputValue("reason")}\``, inline: true },
+                                    { name: 'Sugestão de Melhora', value: `\`${interaction.fields.getTextInputValue("improvement")}\`` },
+                                ]
+                            }).embed
+                    ]
+                });
                 interaction.message.delete();
                 interaction.reply({ content: "Solicitação negada! Sua mensagem foi enviada para o membro e foi salva na minha DataBaseSellers!", ephemeral: true });
                 break;
