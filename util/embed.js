@@ -13,6 +13,7 @@ module.exports = class PixelEmbed {
         this.title = title;
 
     }
+
     get embed() {
         const embed = new EmbedBuilder()
             .setAuthor({ name: this.author, iconURL: this.assetLink("coin_blue") })

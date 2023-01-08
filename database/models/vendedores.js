@@ -2,7 +2,6 @@ const low = require('lowdb')
 const FileSync = require('lowdb/adapters/FileSync')
 let db;
 
-const chalk = require('chalk');
 
 module.exports = class DataBase {
     constructor({ userId, username, userDescriminator, info, newItem, pix, itemId }) {
@@ -18,6 +17,7 @@ module.exports = class DataBase {
 
     init() {
         let adapter = new FileSync(`database/json/${this.userId}.json`)
+
         db = low(adapter);
     }
     create() {
@@ -35,6 +35,7 @@ module.exports = class DataBase {
     }
 
     editAll() {
+        this.init();
         db.set('GeneralInfo', {
             User: this.user,
             Info: this.info,
@@ -43,20 +44,28 @@ module.exports = class DataBase {
         }).write();
     }
 
-    addItem() {
+    addItem(newItem) {
+        this.init();
         db.get('GeneralInfo.Items')
-            .push(this.newItem)
+            .push(newItem)
             .write()
     }
 
     get getItem() {
+        this.init();
         return db.get('GeneralInfo.Items')
             .find({ itemName: this.itemId })
             .value();
     }
 
     get getAllItens() {
+        this.init();
         return db.get('GeneralInfo.Items')
             .value();
+    }
+
+    get getSellerFakeName() {
+        this.init();
+        return db.get('GeneralInfo.Info.fakeNick').value();
     }
 };

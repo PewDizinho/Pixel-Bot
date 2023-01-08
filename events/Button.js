@@ -1,18 +1,18 @@
 
-const { ActionRowBuilder, ModalBuilder, TextInputBuilder, TextInputStyle } = require('discord.js');
-const DataBaseSellers = require("../database/models/vendedores.js");
-const { channelsId, rolesId, porcentagem } = require("../config.json");
-const PixelEmbed = require('../util/embed.js');
+var { ActionRowBuilder, ModalBuilder, TextInputBuilder, TextInputStyle } = require('discord.js');
+var DataBaseSellers = require("../database/models/vendedores.js");
+var { channelsId, rolesId, porcentagem } = require("../config.json");
+var PixelEmbed = require('../util/embed.js');
 
 module.exports = {
     async execute(interaction) {
         switch (interaction.customId) {
             case 'vendedor_submit_aceitar':
-                const embed = (await interaction.message.channel.messages.fetch(interaction.message.id)).embeds[0];
-                const memberObject = interaction.client.guilds.cache.get(interaction.message.guildId).members.cache.get(embed.author.name);
-                const embedInfo = embed.description.replace("+", ',').split("\n")
+                var embed = (await interaction.message.channel.messages.fetch(interaction.message.id)).embeds[0];
+                var memberObject = interaction.client.guilds.cache.get(interaction.message.guildId).members.cache.get(embed.author.name);
+                var embedInfo = embed.description.replace("+", ',').split("\n")
 
-                const seller = new DataBaseSellers({
+                var seller = new DataBaseSellers({
                     userId: memberObject.id,
                     username: memberObject.username,
                     userDescriminator: memberObject.discriminator,
@@ -63,7 +63,7 @@ module.exports = {
                 break;
             case 'vendedor_submit_negar':
 
-                const modal = new ModalBuilder()
+                var modal = new ModalBuilder()
                     .setCustomId('verification_deny_reason')
                     .setTitle('Negar Pedido de Verificação');
 
@@ -85,10 +85,75 @@ module.exports = {
                 interaction.showModal(modal);
                 break;
 
-            case ' item_submit_aceitar':
+            case 'item_submit_aceitar':
+                var embed = (await interaction.message.channel.messages.fetch(interaction.message.id)).embeds[0];
+                var memberObject = interaction.client.guilds.cache.get(interaction.message.guildId).members.cache.get(embed.author.name);
+                var embedInfo = embed.description.replace("+", ',').split("\n");
+   
+                interaction.showModal(
+                    new ModalBuilder()
+                        .setCustomId('item_submit_aceitar')
+                        .setTitle('Aceitar Item')
+                        .addComponents(
+                            new ActionRowBuilder().addComponents(
+                                new TextInputBuilder()
+                                    .setCustomId('urlitem')
+                                    .setLabel('Url (Item + Video instalação)')
+                                    .setPlaceholder('Link Drive (DIFERENTE DO FORNECIDO PELO VENDEDOR) com download do item e o video de instalação')
+                                    .setStyle(TextInputStyle.Short),
+                            ),
+                            new ActionRowBuilder().addComponents(
+                                new TextInputBuilder()
+                                    .setCustomId('urlimage')
+                                    .setLabel('Url direto para imagem/video')
+                                    .setPlaceholder('Url direto para um video ou imagem demonstrando o produto')
+                                    .setStyle(TextInputStyle.Short)
+                                    .setValue("VIDEOURL|IMAGEURL"),
+                            ),
+                            new ActionRowBuilder().addComponents(
+                                new TextInputBuilder()
+                                    .setCustomId('info')
+                                    .setLabel('informações alheias (NÂO MEXER)')
+                                    .setStyle(TextInputStyle.Paragraph)
+                                    .setValue(`${embed.author.name}|${embedInfo[2].split("`")[3]}|${embedInfo[4].split("`")[3]}|${embedInfo[6].split("`")[3]}|${embedInfo[10].split("`")[3]}`),
+                            ),
+                        ),
+                );
 
                 break;
-            case ' item_submit_negar':
+            case 'item_submit_negar':
+                var embed = (await interaction.message.channel.messages.fetch(interaction.message.id)).embeds[0];
+                var memberObject = interaction.client.guilds.cache.get(interaction.message.guildId).members.cache.get(embed.author.name);
+                var embedInfo = embed.description.replace("+", ',').split("\n");
+
+                interaction.showModal(
+                    new ModalBuilder()
+                        .setCustomId('item_submit_negar')
+                        .setTitle('Negar Item')
+                        .addComponents(
+                            new ActionRowBuilder().addComponents(
+                                new TextInputBuilder()
+                                    .setCustomId('motivo')
+                                    .setLabel('Motivo para negar')
+                                    .setPlaceholder('Ex: "Link inválido, favor colocar um video de instalação"')
+                                    .setStyle(TextInputStyle.Paragraph),
+                            ),
+                            new ActionRowBuilder().addComponents(
+                                new TextInputBuilder()
+                                    .setCustomId('userid')
+                                    .setLabel('Id do usuário (Não mexer)')
+                                    .setStyle(TextInputStyle.Short)
+                                    .setValue(memberObject.id),
+                            ),
+                            new ActionRowBuilder().addComponents(
+                                new TextInputBuilder()
+                                    .setCustomId('itemname')
+                                    .setLabel('Nome do item (Não mexer)')
+                                    .setStyle(TextInputStyle.Short)
+                                    .setValue(embedInfo[2].split("`")[3]),
+                            ),
+                        ),
+                );
 
                 break;
 

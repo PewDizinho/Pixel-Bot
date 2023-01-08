@@ -88,7 +88,9 @@ module.exports = {
                     .setValue(selected.charAt(0).toUpperCase() + selected.slice(1))
                     .setStyle(TextInputStyle.Short);
                 modal.addComponents(new ActionRowBuilder().addComponents(itemname), new ActionRowBuilder().addComponents(price), new ActionRowBuilder().addComponents(file), new ActionRowBuilder().addComponents(description), new ActionRowBuilder().addComponents(itemtype));
-                interaction.channel.messages.fetch(interaction.message.id).then(msg => msg.delete());
+                try { interaction.channel.messages.fetch(interaction.message.id).then(msg => msg.delete()); }  catch (error) {
+                    console.log("Erro em StringSelectMenu.js 92 : " + error.toString());
+                };
                 interaction.showModal(modal);
                 break;
         }

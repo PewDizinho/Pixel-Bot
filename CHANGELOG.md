@@ -1,3 +1,3 @@
 # Changelog
 
-- Arrumei algumas mensagens para embed, mudanças astéticas
+- Postagem de item adicionada
