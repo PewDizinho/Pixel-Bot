@@ -8,7 +8,7 @@ module.exports = {
        .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
         .addNumberOption(option =>
             option.setName('id')
-                .setDescription('O ID da transação (normalmente encontrado no título do embed do pagamento')
+                .setDescription('O ID da transação (normalmente encontrado no título do embed do pagamento)')
                 .setRequired(true))
     ,
 

@@ -3,6 +3,7 @@ const fs = require('node:fs');
 const chalk = require('chalk');
 const { version } = require('../config.json');
 
+
 module.exports = {
     name: Events.ClientReady,
     once: true,

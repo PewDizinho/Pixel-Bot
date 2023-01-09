@@ -1,37 +1,47 @@
 const low = require('lowdb')
 const FileSync = require('lowdb/adapters/FileSync')
 let db;
-
+let otherDb;
 
 module.exports = class DataBase {
-    constructor({ userId, username, userDescriminator, info, newItem, pix, itemId }) {
+    constructor({ userId, username, userDiscriminator, info, newItem, pix, itemId, fakeName }) {
         this.userId = userId;
         this.username = username;
-        this.userDescriminator = userDescriminator;
+        this.userDiscriminator = userDiscriminator;
         this.info = info;
         this.newItem = newItem;
         this.pix = pix;
         this.itemId = itemId;
-
+        this.fakeName = fakeName;
     }
 
     init() {
-        let adapter = new FileSync(`database/json/${this.userId}.json`)
-
+        otherDb = low(new FileSync(`database/json/vendedores/rawInfo.json`));
+        var infos = otherDb.get('RawInfo').find({ FakeName: this.fakeName }).value();
+        if (!this.userId) {
+            this.userId = infos.UserId;
+        }
+        let adapter = new FileSync(`database/json/vendedores/${this.userId}.json`)
         db = low(adapter);
     }
     create() {
         this.init();
         db.defaults({
             UserId: this.userId,
+            FakeName: this.fakeName,
             GeneralInfo: {
                 Username: this.username,
-                UserDescriminator: this.userDescriminator,
+                UserDiscriminator: this.userDiscriminator,
                 Info: this.info,
                 Pix: this.pix,
                 Items: []
             }
-        }).write()
+        }).write();
+        otherDb.get('RawInfo').push({
+            FakeName: this.fakeName,
+            UserId: this.userId
+        }).write();
+
     }
 
     editAll() {
@@ -66,6 +76,11 @@ module.exports = class DataBase {
 
     get getSellerFakeName() {
         this.init();
-        return db.get('GeneralInfo.Info.fakeNick').value();
+        return db.get('FakeName').value();
+    }
+
+    get getSellerId() {
+        this.init();
+        return otherDb.get('RawInfo').find({ FakeName: this.fakeName }).value().UserId;
     }
 };

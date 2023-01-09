@@ -1,8 +1,11 @@
 
-var { ActionRowBuilder, ModalBuilder, TextInputBuilder, TextInputStyle } = require('discord.js');
+var { ActionRowBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, ChannelType, PermissionFlagsBits } = require('discord.js');
 var DataBaseSellers = require("../database/models/vendedores.js");
 var { channelsId, rolesId, porcentagem } = require("../config.json");
 var PixelEmbed = require('../util/embed.js');
+const mercadopago = require('../util/mercadopago.js');
+const CompradoresModel = require('../database/models/compradores.js');
+const DataBase = require('../database/models/vendedores.js');
 
 module.exports = {
     async execute(interaction) {
@@ -15,14 +18,15 @@ module.exports = {
                 var seller = new DataBaseSellers({
                     userId: memberObject.id,
                     username: memberObject.username,
-                    userDescriminator: memberObject.discriminator,
+                    userDiscriminator: memberObject.discriminator,
+                    fakeName: embedInfo[4].split("`")[3].toString(),
+                    pix: embedInfo[8].split("`")[3] + "1",
                     info: {
-                        fakeNick: embedInfo[4].split("`")[3],
+
                         description: embedInfo[6].split("`")[3],
                         type: [false, false, false, false, false, false],
                         verificatorId: interaction.user.id
                     },
-                    pix: embedInfo[8].split("`")[3] + "1",
 
                 });
                 seller.create();
@@ -84,12 +88,11 @@ module.exports = {
                 );
                 interaction.showModal(modal);
                 break;
-
             case 'item_submit_aceitar':
                 var embed = (await interaction.message.channel.messages.fetch(interaction.message.id)).embeds[0];
                 var memberObject = interaction.client.guilds.cache.get(interaction.message.guildId).members.cache.get(embed.author.name);
                 var embedInfo = embed.description.replace("+", ',').split("\n");
-   
+
                 interaction.showModal(
                     new ModalBuilder()
                         .setCustomId('item_submit_aceitar')
@@ -156,7 +159,87 @@ module.exports = {
                 );
 
                 break;
+            case 'item_comprar':
+                var embed = (await interaction.message.channel.messages.fetch(interaction.message.id)).embeds[0];
+                var memberObject = interaction.client.guilds.cache.get(interaction.message.guildId).members.cache.get(embed.author.name);
+                var embedInfo = embed.description.replace("+", ',').split("\n");
+                var itemInfo = {
+                    name: `${embed.fields[0].value.split('`')[3]}-${embed.author.name}`,
+                    price: embed.fields[3].value.split('`')[3],
+                    user: interaction.user.id,
+                    username: interaction.user.username,
+                    messageId: interaction.message.id
+                }
+                const isOnSale = new CompradoresModel({
+                    userId: interaction.user.id,
+                    username: interaction.user.username,
+                    userDiscriminator: interaction.user.discriminator,
+                }).verificarDouble(`${embed.fields[0].value.split('`')[3]}-${embed.author.name}`);
+                if (isOnSale) {
+                    interaction.reply(isOnSale)
+                } else {
+                    mercadopago.realizarCompra(interaction, itemInfo);
+                }
 
+                break;
+            case 'item_chat':
+                //DOING
+                var embed = (await interaction.message.channel.messages.fetch(interaction.message.id)).embeds[0];
+                var memberObject = interaction.client.guilds.cache.get(interaction.message.guildId).members.cache.get(embed.author.name);
+                var sellerId = new DataBase({ fakeName: embed.author.name }).getSellerId;
+                const sellerObject = await interaction.guild.members.fetch(sellerId)
+
+                const categoryId = '1054100659718340649';
+
+                await interaction.guild.channels.cache.get("1054100659718340649").children.cache.forEach(channel => {
+                    if (channel.name == `${sellerObject.user.discriminator}-${interaction.user.discriminator}` || channel.name == `${interaction.user.discriminator}-${sellerObject.user.discriminator}`) {
+                        channel.delete();
+                    }
+                }
+                );
+
+
+                interaction.guild.channels.create({
+                    name: `${sellerObject.user.discriminator}-${interaction.user.discriminator}`,
+                    type: ChannelType.GuildText,
+                    parent: categoryId,
+                    topic: `${interaction.user.discriminator}-${sellerObject.user.discriminator}`,
+
+                    permissionOverwrites: [
+                        {
+                            id: '830555222752362498',
+                            deny: [PermissionFlagsBits.ViewChannel],
+                        },
+                        {
+                            id: sellerId,
+                            allow: [PermissionFlagsBits.ViewChannel],
+                        },
+                    ],
+                });
+                //
+                interaction.guild.channels.create({
+                    name: `${interaction.user.discriminator}-${sellerObject.user.discriminator}`,
+                    type: ChannelType.GuildText,
+                    parent: categoryId,
+                    topic: `${sellerObject.user.discriminator}-${interaction.user.discriminator}`,
+                    permissionOverwrites: [
+                        {
+                            id: '830555222752362498',
+                            deny: [PermissionFlagsBits.ViewChannel],
+                        }, {
+                            id: interaction.user.id,
+                            allow: [PermissionFlagsBits.ViewChannel],
+                        },
+                    ],
+                });
+
+
+                interaction.reply({ content: "Um canal para a conversa foi criado!", ephemeral: true });
+
+
+
+
+                break;
 
         }
     }

@@ -113,9 +113,20 @@ module.exports = {
 
                 const assets = interaction.fields.getTextInputValue('urlimage').split("|");
 
+                var row = new ActionRowBuilder()
+                    .addComponents(
+                        new ButtonBuilder()
+                            .setCustomId('item_comprar')
+                            .setLabel('Comprar')
+                            .setStyle(ButtonStyle.Success),
+                        new ButtonBuilder()
+                            .setCustomId('item_chat')
+                            .setLabel('Abrir Chat Com Vendedor')
+                            .setStyle(ButtonStyle.Primary)
+                    );
                 let embd = new PixelEmbed({
                     author: sellerDataBase.getSellerFakeName,
-                    description: `Novo item anunciado! Para realização da compra clique em "comprar" e siga as instruções. Para realização de dúvidas SOBRE O PRODUTO clique em "abrir chat com vendedor", você irá ganhar um nick anônimo e irá conversar com o vendedor que também estará usando seu nick anônimo (${sellerDataBase.getSellerFakeName}), NÃO REPASSE INFORMAÇÕES PESSOAIS PARA O VENDEDOR, Caso o vendedor peça alguma informação ou peça para você realizar o pagamento novamente pra ele, tire prints e denuncie para um membro da staff, (NÃO REALIZE PAGAEMNTOS FORA DO SISTEMA DO PIXEL BOT), após a compra você terá 7 dias para reportar qualquer tipo de erro sobre o item para nós, para mais informações ler: <#1052673481373917324>`,
+                    description: `Novo item anunciado! Para realização da compra clique em "comprar" e siga as instruções. Para realização de dúvidas SOBRE O PRODUTO clique em "abrir chat com vendedor", você irá ganhar um nick anônimo e irá conversar com o vendedor que também estará usando seu nick anônimo (${sellerDataBase.getSellerFakeName}), NÃO REPASSE INFORMAÇÕES PESSOAIS PARA O VENDEDOR, Caso o vendedor peça alguma informação ou peça para você realizar o pagamento novamente pra ele, tire prints e denuncie para um membro da staff, (NÃO REALIZE PAGAMENTOS FORA DO SISTEMA DO PIXEL BOT), após a compra você terá 7 dias para reportar qualquer tipo de erro sobre o item para nós, para mais informações ler: <#1052673481373917324>`,
                     fields: [
                         {
                             name: 'Nome do item', value: `\`\`\`${info[1]}\`\`\``, inline: false,
@@ -142,6 +153,7 @@ module.exports = {
                 interaction.client.guilds.cache.get(interaction.message.guildId).channels.cache.get(channelsId.shop[info[4].toLowerCase()]).send(
                     {
                         content: '',
+                        components: [row],
                         embeds: [
                             embd
                         ]
@@ -161,7 +173,7 @@ module.exports = {
                         content: `Aceita por: ${interaction.user.tag} - \`${interaction.user.id}\` Id da mensagem: ${msg.id}`,
                         embeds: (await interaction.message.channel.messages.fetch(interaction.message.id)).embeds
                     });
-                    console.log(msg);
+                
                     (await interaction.client.guilds.cache.get(interaction.message.guildId).members.cache.get(info[0])).send({
                         content: '', embeds: [
                             new PixelEmbed({
