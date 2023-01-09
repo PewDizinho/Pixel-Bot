@@ -17,9 +17,6 @@ const client = new Client({
 });
 
 
-
-
-
 //COMMANDS 
 client.commands = new Collection();
 const commandsPath = path.join(__dirname, 'commands');

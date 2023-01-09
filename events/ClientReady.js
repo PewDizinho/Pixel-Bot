@@ -2,6 +2,7 @@ const { Events } = require('discord.js');
 const fs = require('node:fs');
 const chalk = require('chalk');
 const { version } = require('../config.json');
+const GoogleDrive = require('../util/googledrive');
 
 
 module.exports = {
@@ -17,7 +18,9 @@ module.exports = {
         console.log(`${chalk.grey('Comandos')} ${chalk.green(fs.readdirSync('./commands').filter(file => file.endsWith('.js')).length)}`)
         console.log(`${chalk.grey('Eventos')} ${chalk.green(fs.readdirSync('./events').filter(file => file.endsWith('.js')).length)}`)
 
-
+        GoogleDrive.uploadFile().then(data => {
+            console.log(data);
+        });
         // console.log(`${chalk.grey('DataBase')} ${chalk.green("Connected!")}`)
 
     },

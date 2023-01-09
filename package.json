@@ -17,9 +17,11 @@
   },
   "homepage": "https://github.com/PewDizinho/Pixel-Bot#readme",
   "dependencies": {
+    "@google-cloud/local-auth": "^2.1.0",
     "chalk": "^4.1.2",
     "discord.js": "^14.7.1",
     "faz-um-pix": "^2.0.2",
+    "googleapis": "^110.0.0",
     "jimp": "^0.16.2",
     "lowdb": "^1.0.0",
     "mercadopago": "^1.5.14",
