@@ -9,6 +9,16 @@ module.exports = {
 
     async execute(interaction) {
 
-        interaction.reply({ content: "y", embeds: [new PixelEmbed({ author: "Cool Title", description: "Cool Description", image: "pixel_community", title: true}).embed] });
+        interaction.reply({
+            content: "y", embeds: [
+                new PixelEmbed(
+                    {
+                        author: "Cool Title",
+                        description: "Cool Description",
+                        image: "pixel_community",
+              
+                    }).embed
+            ]
+        });
     }
 }

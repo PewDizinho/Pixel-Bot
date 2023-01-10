@@ -12,10 +12,16 @@ module.exports = {
 
 
         if (otherChannel) {
+            let image = [];
+            let newImages = "\n\n```Imagens Enviadas```\n";
+            message.attachments.map(attachment => { image.push(attachment.url); });
+            for (var i of image) {
+                newImages += `${i} - `;
+            }
             otherChannel.createWebhook({
                 name: "Chat com Vendedor - Anônimo - Não repasse informações",
                 avatar: "https://cdn.discordapp.com/attachments/1052329282069872650/1052329371165274132/Pixel_Coin_Blue.png",
-            }).then(wb => wb.send(message.content).then(() => wb.delete()));
+            }).then(wb => wb.send(`${(message.content ?? '')}  ${newImages}` ).then(() => wb.delete()));
         } else {
             message.channel.delete("Chat sem a outra metade da laranja");
         }

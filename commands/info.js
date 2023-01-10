@@ -32,7 +32,14 @@ module.exports = {
 
 
 
-		await interaction.reply({ content: '', ephemeral: true, embeds: [new PixelEmbed({ author: "Pixel", description: 'Escolha as opções abaixo! \n\n<:Pixel_TC:892224665030901800> Pixel Store\n\n<:Pixel_Coin_Green:1052329968090218617> Pixel Community', thumbnail: 'coin_blue' }).embed], components: [row] });
+		await interaction.reply({
+			content: '', ephemeral: true, embeds: [
+				new PixelEmbed(
+					{
+						author: "Pixel",
+						description: 'Escolha as opções abaixo! \n\n<:Pixel_TC:892224665030901800> Pixel Store\n\n<:Pixel_Coin_Green:1052329968090218617> Pixel Community', thumbnail: 'coin_blue'
+					}).embed], components: [row]
+		});
 
 	},
 };

@@ -236,7 +236,7 @@ module.exports = {
                     });
                     channel.send({
                         content: "Item em questão",
-                       embeds: [embed]
+                        embeds: [embed]
                     })
                 });
                 //
@@ -272,7 +272,6 @@ module.exports = {
                 });
                 interaction.reply({ content: "Um canal para a conversa foi criado!", ephemeral: true });
                 break;
-
         }
     }
 

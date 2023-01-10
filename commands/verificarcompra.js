@@ -5,7 +5,7 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('verificarcompra')
         .setDescription('Verifique o status da sua compra!')
-       .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
+     //  .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
         .addNumberOption(option =>
             option.setName('id')
                 .setDescription('O ID da transação (normalmente encontrado no título do embed do pagamento)')

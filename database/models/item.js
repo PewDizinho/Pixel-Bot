@@ -11,13 +11,12 @@ module.exports = class ItemDataBase {
     addNewItem() {
         db.push({
             "name": this.name,
-            "price": this.price.replace("R$", ""),
+            "price": (this.price.replace("R$", "")).replace(",", "."),
             "authorId": this.authorId
         }).write();
 
       
     };
-
     get getItemByName() {
         return db.find({ "name": this.name }).value();
     }

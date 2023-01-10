@@ -1,7 +1,6 @@
 const { EmbedBuilder } = require('discord.js');
 const { defaultFooter } = require("../config.json");
 module.exports = class PixelEmbed {
-
     constructor({ author, description, image, thumbnail, footer, link, fields, title }) {
         this.author = author;
         this.description = description;
@@ -21,8 +20,7 @@ module.exports = class PixelEmbed {
             .setDescription(this.description)
             .setFooter(this.footer ?? defaultFooter)
             .setTimestamp()
-            .setFields(this.fields ?? [])
-            ;
+            .setFields(this.fields ?? []);
 
         if (this.title) {
             embed.setTitle(this.title)

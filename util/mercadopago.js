@@ -106,7 +106,7 @@ module.exports = {
 
 
     },
-    verificarCompra(interaction, id) {
+     verificarCompra(interaction, id) {
         var options = {
             hostname: 'api.mercadopago.com',
             port: 443,
@@ -121,7 +121,7 @@ module.exports = {
             resp.on('data', (chunk) => {
                 data += chunk;
             });
-            resp.on('end', () => {
+            resp.on('end', async () => {
                 let parsedData = JSON.parse(data);
                 if (parsedData.status == "approved") {
                     interaction.reply({
@@ -142,11 +142,11 @@ module.exports = {
                     //DOING
                     //Entregar o item para o comprador, pensar nesse sistema ainda
 
-                    const itemInfo = new ItemDataBase({
+                    const itemInfo = await new ItemDataBase({
                         name: itemObj.name.split('-')[0],
                         price: itemObj.price
                     }).getItemByNameAndPrice;
-
+                    console.log(itemInfo);
                     const itemDownloadUrl = new DataBase({
                         userId: itemInfo.authorId,
                         itemId: itemObj.name.split('-')[0]

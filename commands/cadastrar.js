@@ -3,7 +3,7 @@ const { SlashCommandBuilder, ActionRowBuilder, ModalBuilder, TextInputBuilder, T
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('cadastrar')
-        .setDescription('Se cadastre!')
+        .setDescription('Se cadastre para vendedor pixel!')
         .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
     async execute(interaction) {
         const modal = new ModalBuilder()

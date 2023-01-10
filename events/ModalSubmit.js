@@ -179,7 +179,7 @@ module.exports = {
                         content: `Aceita por: ${interaction.user.tag} - \`${interaction.user.id}\` Id da mensagem: ${msg.id}`,
                         embeds: (await interaction.message.channel.messages.fetch(interaction.message.id)).embeds
                     });
-
+                    console.log(info[0]);
                     (await interaction.client.guilds.cache.get(interaction.message.guildId).members.cache.get(info[0])).send({
                         content: '', embeds: [
                             new PixelEmbed({
