@@ -39,7 +39,6 @@ module.exports = class CompradoresModel {
 
     addCompraPendente(itemInfo) {
         this.init();
-
         db.get('Compras.pendentes')
             .push(itemInfo)
             .write();
@@ -49,6 +48,7 @@ module.exports = class CompradoresModel {
         this.init();
         db.get('Compras.realizadas').push(db.get('Compras.pendentes').find({ compraId: itemId }).value()).write();
         db.get('Compras.pendentes').remove({ compraId: itemId }).write();
+        return db.get('Compras.realizadas').find({ compraId: itemId }).value();
     }
 
     verificarDouble(itemName) {

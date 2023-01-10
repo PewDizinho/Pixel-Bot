@@ -3,6 +3,7 @@ const PixelEmbed = require("../util/embed.js");
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const { channelsId } = require("../config.json");
 const DataBase = require("../database/models/vendedores.js");
+const ItemDataBase = require("../database/models/item.js");
 module.exports = {
     async execute(interaction) {
         switch (interaction.customId) {
@@ -100,7 +101,6 @@ module.exports = {
                 }
 
                 break;
-
             case 'item_submit_aceitar':
                 const info = interaction.fields.getTextInputValue('info').split("|");//[ '409488966665109505', 'Name', 'Price', 'Descrição', 'Script' ]
                 const isValidUrl = urlString => {
@@ -110,8 +110,13 @@ module.exports = {
                 const sellerDataBase = new DataBase({
                     userId: info[0],
                 });
-
+                new ItemDataBase({
+                    name: info[1],
+                    authorId: info[0],
+                    price: info[2],
+                }).addNewItem()
                 const assets = interaction.fields.getTextInputValue('urlimage').split("|");
+                const itemUrl = interaction.fields.getTextInputValue('urlitem');
 
                 var row = new ActionRowBuilder()
                     .addComponents(
@@ -125,20 +130,20 @@ module.exports = {
                             .setStyle(ButtonStyle.Primary)
                     );
                 let embd = new PixelEmbed({
-                    author: sellerDataBase.getSellerFakeName,
+                    author: sellerDataBase.getSellerFakeName.toString(),
                     description: `Novo item anunciado! Para realização da compra clique em "comprar" e siga as instruções. Para realização de dúvidas SOBRE O PRODUTO clique em "abrir chat com vendedor", você irá ganhar um nick anônimo e irá conversar com o vendedor que também estará usando seu nick anônimo (${sellerDataBase.getSellerFakeName}), NÃO REPASSE INFORMAÇÕES PESSOAIS PARA O VENDEDOR, Caso o vendedor peça alguma informação ou peça para você realizar o pagamento novamente pra ele, tire prints e denuncie para um membro da staff, (NÃO REALIZE PAGAMENTOS FORA DO SISTEMA DO PIXEL BOT), após a compra você terá 7 dias para reportar qualquer tipo de erro sobre o item para nós, para mais informações ler: <#1052673481373917324>`,
                     fields: [
                         {
-                            name: 'Nome do item', value: `\`\`\`${info[1]}\`\`\``, inline: false,
+                            name: 'Nome do item', value: `\`\`\`${info[1].toString()}\`\`\``, inline: false,
                         },
                         {
-                            name: 'Descrição do item', value: `\`\`\`${info[3]}\`\`\``, inline: true,
+                            name: 'Descrição do item', value: `\`\`\`${info[3].toString()}\`\`\``, inline: true,
                         },
                         {
                             name: 'Tipo de item', value: `\`\`\`${info[4].toUpperCase()}\`\`\``, inline: false,
                         },
                         {
-                            name: 'Preço', value: `\`\`\`${info[2]}\`\`\``, inline: true,
+                            name: 'Preço', value: `\`\`\`${info[2].toString()}\`\`\``, inline: true,
                         },
 
                     ],
@@ -161,6 +166,7 @@ module.exports = {
                 ).then(async msg => {
                     sellerDataBase.addItem({
                         messageId: msg.id,
+                        downloadUrl: itemUrl,
                         name: info[1],
                         description: info[3],
                         type: info[4].toLowerCase(),
@@ -173,7 +179,7 @@ module.exports = {
                         content: `Aceita por: ${interaction.user.tag} - \`${interaction.user.id}\` Id da mensagem: ${msg.id}`,
                         embeds: (await interaction.message.channel.messages.fetch(interaction.message.id)).embeds
                     });
-                
+
                     (await interaction.client.guilds.cache.get(interaction.message.guildId).members.cache.get(info[0])).send({
                         content: '', embeds: [
                             new PixelEmbed({
@@ -197,10 +203,6 @@ module.exports = {
 
                 });
                 interaction.reply({ content: "Solicitação aceitada! O vendedor foi notificado e o item já está na loja!", ephemeral: true });
-
-
-
-
 
                 break
 

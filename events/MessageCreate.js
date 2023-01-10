@@ -13,8 +13,8 @@ module.exports = {
 
         if (otherChannel) {
             otherChannel.createWebhook({
-                name: message.author.username,
-                avatar: message.author.avatarUrl,
+                name: "Chat com Vendedor - Anônimo - Não repasse informações",
+                avatar: "https://cdn.discordapp.com/attachments/1052329282069872650/1052329371165274132/Pixel_Coin_Blue.png",
             }).then(wb => wb.send(message.content).then(() => wb.delete()));
         } else {
             message.channel.delete("Chat sem a outra metade da laranja");

@@ -64,10 +64,13 @@ module.exports = class DataBase {
     get getItem() {
         this.init();
         return db.get('GeneralInfo.Items')
-            .find({ itemName: this.itemId })
+            .find({ name: this.itemId })
             .value();
     }
-
+    get getPix() {
+        this.init();
+        return db.get('GeneralInfo.Pix').value();
+    }
     get getAllItens() {
         this.init();
         return db.get('GeneralInfo.Items')

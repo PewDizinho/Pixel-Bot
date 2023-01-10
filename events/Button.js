@@ -187,23 +187,26 @@ module.exports = {
                 var embed = (await interaction.message.channel.messages.fetch(interaction.message.id)).embeds[0];
                 var memberObject = interaction.client.guilds.cache.get(interaction.message.guildId).members.cache.get(embed.author.name);
                 var sellerId = new DataBase({ fakeName: embed.author.name }).getSellerId;
+                const clientId = interaction.user.id;
                 const sellerObject = await interaction.guild.members.fetch(sellerId)
-
                 const categoryId = '1054100659718340649';
 
+                const chatName = `${clientId.substring(clientId.length - 5)}-${sellerId.substring(sellerId.length - 5)}`;
+                const chatName2 = `${sellerId.substring(sellerId.length - 5)}-${clientId.substring(clientId.length - 5)}`;
+
+
+
                 await interaction.guild.channels.cache.get("1054100659718340649").children.cache.forEach(channel => {
-                    if (channel.name == `${sellerObject.user.discriminator}-${interaction.user.discriminator}` || channel.name == `${interaction.user.discriminator}-${sellerObject.user.discriminator}`) {
+                    if (channel.name == chatName2 || channel.name == chatName) {
                         channel.delete();
                     }
                 }
                 );
-
-
                 interaction.guild.channels.create({
-                    name: `${sellerObject.user.discriminator}-${interaction.user.discriminator}`,
+                    name: chatName2,
                     type: ChannelType.GuildText,
                     parent: categoryId,
-                    topic: `${interaction.user.discriminator}-${sellerObject.user.discriminator}`,
+                    topic: chatName,
 
                     permissionOverwrites: [
                         {
@@ -215,13 +218,33 @@ module.exports = {
                             allow: [PermissionFlagsBits.ViewChannel],
                         },
                     ],
+                }).then(channel => {
+                    channel.send({
+                        content: "Vendedor",
+                        embeds: [new PixelEmbed({
+                            author: "Regras do Chat",
+                            description: "Você está prestes a falar com um comprador interessado pelo seu produto, siga as seguintes regras e denuncie o comprador caso ele quebre alguma dessas regras usando /denunciar nesse chat!",
+                            fields: [
+                                { name: "Informações", value: "\``\`\`Não repasse nenhum tipo de informação pessoal, como Nome real do discord ou o item em questão\`\`\`", inline: true },
+                                { name: "Anonimato", value: "\`\`\`Não aceite iniciar uma conversa por fora desse chat, a Pixel não tem poder para prestar auxilio sobre assuntos acontecidos fora do nosso poder, mantenha tudo aqui e denuncie qualquer comprador que tente te convencer a ir para outro chat (como privado), e se apresente como seu nome falso, se refira ao cliente como \"cliente\"\`\`\`", inline: true },
+                                { name: "Pagamento", value: "\`\`\`DE MODO ALGUM exija por informações sobre o pagamento ou por outro pagamento\`\`\`", inline: true },
+                                { name: "Penalidades", value: "\`\`\`O Cliente tem o poder de denunciar essa conversa, Vendedores que forem pegos quebrando as regras acima irão: Perder seu cargo de vendedor, ser expulso da Pixel, e perderá todo dinheiro retido (seja pelos 7 dias pós compra ou 16 dias de suporte)\`\`\`", inline: true },
+
+                            ]
+                        }).embed,
+                        ]
+                    });
+                    channel.send({
+                        content: "Item em questão",
+                       embeds: [embed]
+                    })
                 });
                 //
                 interaction.guild.channels.create({
-                    name: `${interaction.user.discriminator}-${sellerObject.user.discriminator}`,
+                    name: chatName,
                     type: ChannelType.GuildText,
                     parent: categoryId,
-                    topic: `${sellerObject.user.discriminator}-${interaction.user.discriminator}`,
+                    topic: chatName2,
                     permissionOverwrites: [
                         {
                             id: '830555222752362498',
@@ -231,14 +254,23 @@ module.exports = {
                             allow: [PermissionFlagsBits.ViewChannel],
                         },
                     ],
+                }).then(channel => {
+                    channel.send({
+                        content: "Cliente",
+                        embeds: [new PixelEmbed({
+                            author: "Regras do Chat",
+                            description: "Você está prestes a falar com o criador do produto, siga as seguintes regras e denuncie o vendedor caso ele quebre alguma dessas regras usando /denunciar nesse chat!",
+                            fields: [
+                                { name: "Informações", value: "\`\`\`Não repasse nenhum tipo de informação pessoal, como Nome real do discord ou informações de pagamento\`\`\`", inline: true },
+                                { name: "Anonimato", value: "\`\`\`Não aceite iniciar uma conversa por fora desse chat, a Pixel não tem poder para prestar auxilio sobre assuntos acontecidos fora do nosso poder, mantenha tudo aqui e denuncie qualquer vendedor que tente te convencer a ir para outro chat (como privado)\`\`\`", inline: true },
+                                { name: "Pagamento", value: "\`\`\`DE MODO ALGUM realize um pagamento direto com o vendedor, caso você realize uma compra direta com o vendedor, a Pixel **NÃO** irá prestar suporte\`\`\`", inline: true },
+                                { name: "Dúvidas", value: "\`\`\`Mantenha sua pergunta sobre o item especificado, seja breve, exemplo: \"O quão configurável é esse plugin?\", \"Qual o tamanho dessa construção?\"\`\`\`", inline: false },
+                                { name: "Fechar o chat", value: "\`\`\`Após todas suas dúvidas serem tiradas, execute /fecharchat dentro do chat, e o chat irá ser fechado.\`\`\`", inline: true },
+                            ]
+                        }).embed]
+                    });
                 });
-
-
                 interaction.reply({ content: "Um canal para a conversa foi criado!", ephemeral: true });
-
-
-
-
                 break;
 
         }

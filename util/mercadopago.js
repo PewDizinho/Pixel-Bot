@@ -4,12 +4,15 @@ const fs = require("fs");
 let https = require('https');
 const PixelEmbed = require("./embed");
 const CompradoresModel = require("../database/models/compradores");
+const ItemDataBase = require("../database/models/item");
+const DataBase = require("../database/models/vendedores");
+const Payments = require("../database/models/payments");
 
 module.exports = {
     realizarCompra(interaction, itemInfo) {
         itemInfo.price = itemInfo.price.replace('R$', "");
         itemInfo.price = itemInfo.price.replace(',', ".");
-        console.log(itemInfo)
+
         var mercadopago = require('mercadopago');
         mercadopago.configurations.setAccessToken(mercadoPago.token);
         var payment_data = {
@@ -131,6 +134,28 @@ module.exports = {
                         ],
                         ephemeral: true,
                     });
+                    const itemObj = new CompradoresModel({
+                        userId: interaction.user.id,
+                        username: interaction.user.username,
+                        userDiscriminator: interaction.user.discriminator,
+                    }).confirmarCompra(id);
+                    //DOING
+                    //Entregar o item para o comprador, pensar nesse sistema ainda
+
+                    const itemInfo = new ItemDataBase({
+                        name: itemObj.name.split('-')[0],
+                        price: itemObj.price
+                    }).getItemByNameAndPrice;
+
+                    const itemDownloadUrl = new DataBase({
+                        userId: itemInfo.authorId,
+                        itemId: itemObj.name.split('-')[0]
+                    }).getItem.downloadUrl;
+                    new Payments({
+                        price: itemObj.price,
+                        authorId: itemInfo.authorId.toString()
+                    }).addPendente();
+
                     interaction.user.send({
                         content: "",
                         embeds: [
@@ -141,19 +166,13 @@ module.exports = {
                                     { name: "Comprador", value: `\`\`\`${interaction.user.tag}\`\`\`` },
                                     { name: "Id do Comprador", value: `\`\`\`${interaction.user.id}\`\`\`` },
                                     { name: "Id da Compra", value: `\`\`\`${id}\`\`\`` },
-
+                                    { name: "Download", value: itemDownloadUrl.toString() },
+                                    { name: "Suporte", value: "Você pode requerir suporte em até `7`(sete) dias a partir de agora e você poderá ter direito a reembolso caso o autor do produto não consiga resolver o problema dentro de `16` (dezesseis) dias após ser notificado, após os `7` (sete) dias não podemos garantir o reembolso" }
                                 ]
                             }).embed
                         ]
                     })
 
-                    new CompradoresModel({
-                        userId: interaction.user.id,
-                        username: interaction.user.username,
-                        userDiscriminator: interaction.user.discriminator,
-                    }).confirmarCompra(id);
-                    //TO-DO
-                    //Entregar o item para o comprador, pensar nesse sistema ainda
 
                 } else if (parsedData.status == "pending") {
                     interaction.reply({
